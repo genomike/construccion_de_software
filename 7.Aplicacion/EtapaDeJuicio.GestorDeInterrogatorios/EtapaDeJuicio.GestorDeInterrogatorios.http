@@ -1,0 +1,6 @@
+@EtapaDeJuicio.GestorDeInterrogatorios_HostAddress = http://localhost:5189
+
+GET {{EtapaDeJuicio.GestorDeInterrogatorios_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

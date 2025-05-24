@@ -1,0 +1,14 @@
+C:\Users\genoc\OneDrive\Documentos\Maestria\ConstrucciónDeSoftware\PAC\7.Aplicacion\EtapaDeJuicio.Domain\bin\Debug\net8.0\EtapaDeJuicio.Domain.exe
+C:\Users\genoc\OneDrive\Documentos\Maestria\ConstrucciónDeSoftware\PAC\7.Aplicacion\EtapaDeJuicio.Domain\bin\Debug\net8.0\EtapaDeJuicio.Domain.deps.json
+C:\Users\genoc\OneDrive\Documentos\Maestria\ConstrucciónDeSoftware\PAC\7.Aplicacion\EtapaDeJuicio.Domain\bin\Debug\net8.0\EtapaDeJuicio.Domain.runtimeconfig.json
+C:\Users\genoc\OneDrive\Documentos\Maestria\ConstrucciónDeSoftware\PAC\7.Aplicacion\EtapaDeJuicio.Domain\bin\Debug\net8.0\EtapaDeJuicio.Domain.dll
+C:\Users\genoc\OneDrive\Documentos\Maestria\ConstrucciónDeSoftware\PAC\7.Aplicacion\EtapaDeJuicio.Domain\bin\Debug\net8.0\EtapaDeJuicio.Domain.pdb
+C:\Users\genoc\OneDrive\Documentos\Maestria\ConstrucciónDeSoftware\PAC\7.Aplicacion\EtapaDeJuicio.Domain\obj\Debug\net8.0\EtapaDeJuicio.Domain.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\genoc\OneDrive\Documentos\Maestria\ConstrucciónDeSoftware\PAC\7.Aplicacion\EtapaDeJuicio.Domain\obj\Debug\net8.0\EtapaDeJuicio.Domain.AssemblyInfoInputs.cache
+C:\Users\genoc\OneDrive\Documentos\Maestria\ConstrucciónDeSoftware\PAC\7.Aplicacion\EtapaDeJuicio.Domain\obj\Debug\net8.0\EtapaDeJuicio.Domain.AssemblyInfo.cs
+C:\Users\genoc\OneDrive\Documentos\Maestria\ConstrucciónDeSoftware\PAC\7.Aplicacion\EtapaDeJuicio.Domain\obj\Debug\net8.0\EtapaDeJuicio.Domain.csproj.CoreCompileInputs.cache
+C:\Users\genoc\OneDrive\Documentos\Maestria\ConstrucciónDeSoftware\PAC\7.Aplicacion\EtapaDeJuicio.Domain\obj\Debug\net8.0\EtapaDeJuicio.Domain.dll
+C:\Users\genoc\OneDrive\Documentos\Maestria\ConstrucciónDeSoftware\PAC\7.Aplicacion\EtapaDeJuicio.Domain\obj\Debug\net8.0\refint\EtapaDeJuicio.Domain.dll
+C:\Users\genoc\OneDrive\Documentos\Maestria\ConstrucciónDeSoftware\PAC\7.Aplicacion\EtapaDeJuicio.Domain\obj\Debug\net8.0\EtapaDeJuicio.Domain.pdb
+C:\Users\genoc\OneDrive\Documentos\Maestria\ConstrucciónDeSoftware\PAC\7.Aplicacion\EtapaDeJuicio.Domain\obj\Debug\net8.0\EtapaDeJuicio.Domain.genruntimeconfig.cache
+C:\Users\genoc\OneDrive\Documentos\Maestria\ConstrucciónDeSoftware\PAC\7.Aplicacion\EtapaDeJuicio.Domain\obj\Debug\net8.0\ref\EtapaDeJuicio.Domain.dll

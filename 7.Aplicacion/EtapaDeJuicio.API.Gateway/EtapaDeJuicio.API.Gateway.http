@@ -1,0 +1,6 @@
+@EtapaDeJuicio.API.Gateway_HostAddress = http://localhost:5107
+
+GET {{EtapaDeJuicio.API.Gateway_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

@@ -1,0 +1,14 @@
+C:\Users\genoc\OneDrive\Documentos\Maestria\ConstrucciónDeSoftware\PAC\7.Aplicacion\EtapaDeJuicio.SharedKernel\bin\Debug\net8.0\EtapaDeJuicio.SharedKernel.exe
+C:\Users\genoc\OneDrive\Documentos\Maestria\ConstrucciónDeSoftware\PAC\7.Aplicacion\EtapaDeJuicio.SharedKernel\bin\Debug\net8.0\EtapaDeJuicio.SharedKernel.deps.json
+C:\Users\genoc\OneDrive\Documentos\Maestria\ConstrucciónDeSoftware\PAC\7.Aplicacion\EtapaDeJuicio.SharedKernel\bin\Debug\net8.0\EtapaDeJuicio.SharedKernel.runtimeconfig.json
+C:\Users\genoc\OneDrive\Documentos\Maestria\ConstrucciónDeSoftware\PAC\7.Aplicacion\EtapaDeJuicio.SharedKernel\bin\Debug\net8.0\EtapaDeJuicio.SharedKernel.dll
+C:\Users\genoc\OneDrive\Documentos\Maestria\ConstrucciónDeSoftware\PAC\7.Aplicacion\EtapaDeJuicio.SharedKernel\bin\Debug\net8.0\EtapaDeJuicio.SharedKernel.pdb
+C:\Users\genoc\OneDrive\Documentos\Maestria\ConstrucciónDeSoftware\PAC\7.Aplicacion\EtapaDeJuicio.SharedKernel\obj\Debug\net8.0\EtapaDeJuicio.SharedKernel.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\genoc\OneDrive\Documentos\Maestria\ConstrucciónDeSoftware\PAC\7.Aplicacion\EtapaDeJuicio.SharedKernel\obj\Debug\net8.0\EtapaDeJuicio.SharedKernel.AssemblyInfoInputs.cache
+C:\Users\genoc\OneDrive\Documentos\Maestria\ConstrucciónDeSoftware\PAC\7.Aplicacion\EtapaDeJuicio.SharedKernel\obj\Debug\net8.0\EtapaDeJuicio.SharedKernel.AssemblyInfo.cs
+C:\Users\genoc\OneDrive\Documentos\Maestria\ConstrucciónDeSoftware\PAC\7.Aplicacion\EtapaDeJuicio.SharedKernel\obj\Debug\net8.0\EtapaDeJuicio.SharedKernel.csproj.CoreCompileInputs.cache
+C:\Users\genoc\OneDrive\Documentos\Maestria\ConstrucciónDeSoftware\PAC\7.Aplicacion\EtapaDeJuicio.SharedKernel\obj\Debug\net8.0\EtapaDeJuicio.SharedKernel.dll
+C:\Users\genoc\OneDrive\Documentos\Maestria\ConstrucciónDeSoftware\PAC\7.Aplicacion\EtapaDeJuicio.SharedKernel\obj\Debug\net8.0\refint\EtapaDeJuicio.SharedKernel.dll
+C:\Users\genoc\OneDrive\Documentos\Maestria\ConstrucciónDeSoftware\PAC\7.Aplicacion\EtapaDeJuicio.SharedKernel\obj\Debug\net8.0\EtapaDeJuicio.SharedKernel.pdb
+C:\Users\genoc\OneDrive\Documentos\Maestria\ConstrucciónDeSoftware\PAC\7.Aplicacion\EtapaDeJuicio.SharedKernel\obj\Debug\net8.0\EtapaDeJuicio.SharedKernel.genruntimeconfig.cache
+C:\Users\genoc\OneDrive\Documentos\Maestria\ConstrucciónDeSoftware\PAC\7.Aplicacion\EtapaDeJuicio.SharedKernel\obj\Debug\net8.0\ref\EtapaDeJuicio.SharedKernel.dll
