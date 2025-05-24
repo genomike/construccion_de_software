@@ -1,0 +1,8 @@
+@startuml
+[*] --> Borrador
+Borrador --> Formalizada: firma fiscal
+Formalizada --> Notificada: comunicación partes
+Notificada --> Admitida: recepción juzgado
+Admitida --> [*]
+Formalizada --> Rechazada: por defectos formales
+@enduml

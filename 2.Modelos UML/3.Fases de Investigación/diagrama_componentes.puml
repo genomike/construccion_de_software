@@ -1,0 +1,15 @@
+@startuml
+component "Módulo Fiscal" as MF {
+  [Gestor Investigación]
+}
+
+component "Módulo Policial" as MP {
+  [Tracker Diligencias]
+}
+
+component "Banco de Pruebas" as BP
+
+MF --> MP : Solicita diligencias
+MP --> BP : Registra evidencias
+BP --> MF : Proporciona análisis
+@enduml

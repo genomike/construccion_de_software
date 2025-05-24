@@ -1,0 +1,7 @@
+@startuml
+[*] --> Iniciada
+Iniciada --> En_Proceso: asignación fiscal
+En_Proceso --> Concluida: diligencias completas
+Concluida --> Acusación: pruebas suficientes
+Concluida --> Sobreseído: insuficiencia probatoria
+@enduml

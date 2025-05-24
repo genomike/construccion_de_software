@@ -1,0 +1,20 @@
+@startuml
+left to right direction
+actor Fiscalía
+actor Policía
+actor "Sistema Judicial" as Sistema
+
+rectangle "Evaluación Preliminar" {
+  (Iniciar Evaluación) as iniciar
+  (Revisar Denuncia) as revisar
+  (Generar Órdenes) as ordenes
+  (Derivar a Policía) as derivar
+}
+
+Fiscalía --> iniciar
+Fiscalía --> revisar
+Fiscalía --> ordenes
+Fiscalía --> derivar
+Policía --> (Realizar Diligencias)
+Sistema --> (Archivar Caso)
+@enduml

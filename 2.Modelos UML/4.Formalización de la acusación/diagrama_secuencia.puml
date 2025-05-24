@@ -1,0 +1,14 @@
+@startuml
+participant Fiscal
+participant SistemaJudicial
+participant Secretaría
+participant Juez
+
+Fiscal -> SistemaJudicial: Iniciar formalización
+SistemaJudicial -> Fiscal: Solicitar pruebas
+Fiscal -> SistemaJudicial: Cargar documentación
+SistemaJudicial -> Secretaría: Generar documento formal
+Secretaría -> Juez: Remitir expediente
+Juez --> SistemaJudicial: Acusación recibida
+SistemaJudicial -> Fiscal: Confirmación
+@enduml

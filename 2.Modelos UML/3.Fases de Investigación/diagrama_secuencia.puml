@@ -1,0 +1,15 @@
+@startuml
+participant Fiscalía
+participant Sistema
+participant Policía
+
+Fiscalía -> Sistema: Solicitar diligencia
+Sistema -> Policía: Asignar tarea
+Policía -> Sistema: Enviar informe
+Sistema -> Fiscalía: Notificar resultados
+alt Pruebas suficientes
+    Fiscalía -> Sistema: Preparar acusación
+else
+    Fiscalía -> Sistema: Archivar caso
+end
+@enduml

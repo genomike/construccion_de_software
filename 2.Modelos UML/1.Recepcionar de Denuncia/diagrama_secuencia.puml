@@ -1,0 +1,13 @@
+@startuml
+participant Ciudadano
+participant "Mesa de Partes" as Mesa
+participant Sistema
+participant Fiscalía
+
+Ciudadano -> Mesa: Enviar denuncia
+Mesa -> Sistema: Generar Denuncia
+Sistema -> Sistema: Validar datos
+Sistema -> Fiscalía: Asignar Denuncia
+Fiscalía --> Sistema: Confirmación
+Sistema --> Ciudadano: Notificar N° de Caso
+@enduml

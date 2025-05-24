@@ -1,0 +1,24 @@
+@startuml
+class Acusación {
+  -nro_expediente: String
+  -fecha_creación: Date
+  -estado: Enum
+  +generarDocumento()
+  +firmarPorFiscal()
+}
+
+class Prueba {
+  -tipo: String
+  -peso_legal: Integer
+  +adjuntarAAcusación()
+}
+
+class Parte {
+  -nombre: String
+  -rol: String
+  +recibirNotificación()
+}
+
+Acusación "1" --> "n" Prueba
+Acusación "1" --> "n" Parte
+@enduml

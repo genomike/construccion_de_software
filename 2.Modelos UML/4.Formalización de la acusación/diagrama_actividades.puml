@@ -1,0 +1,14 @@
+@startuml
+start
+:Revisión exhaustiva de pruebas;
+if (¿Pruebas suficientes?) then (Sí)
+  :Redactar acusación formal;
+  :Firmar por fiscal titular;
+  :Notificar al imputado;
+  :Remitir al juzgado;
+else (No)
+  :Archivar temporalmente;
+  :Solicitar más diligencias;
+endif
+stop
+@enduml

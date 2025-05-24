@@ -1,0 +1,15 @@
+@startuml
+start
+:Fiscalía inicia evaluación;
+if (¿Denuncia válida?) then (Sí)
+  :Generar órdenes;
+  repeat
+    :Policía realiza diligencias;
+    -> Esperar resultados;
+  repeat while (¿Datos completos?)
+  :Cerrar caso;
+else (No)
+  :Archivar caso;
+endif
+stop
+@enduml

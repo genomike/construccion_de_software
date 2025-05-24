@@ -1,0 +1,44 @@
+@startuml Trial Stage Use Cases
+
+actor Juez as judge
+actor Fiscal as prosecutor
+actor Defensor as defense
+actor Acusado as defendant
+actor Testigo as witness
+
+rectangle "Sistema de Gestión de Juicios" {
+  usecase "Iniciar audiencia" as UC1
+  usecase "Presentar pruebas" as UC2
+  usecase "Realizar interrogatorio" as UC3
+  usecase "Deliberar" as UC4
+  usecase "Emitir sentencia" as UC5
+  usecase "Gestionar pruebas documentales" as UC6
+  usecase "Gestionar pruebas materiales" as UC7
+  usecase "Gestionar pruebas testimoniales" as UC8
+  usecase "Gestionar pruebas periciales" as UC9
+}
+
+judge --> UC1
+judge --> UC4
+judge --> UC5
+prosecutor --> UC2
+prosecutor --> UC3
+defense --> UC2
+defense --> UC3
+defendant --> UC3
+witness --> UC8
+prosecutor --> UC6
+prosecutor --> UC7
+prosecutor --> UC8
+prosecutor --> UC9
+defense --> UC6
+defense --> UC7
+defense --> UC8
+defense --> UC9
+
+UC2 <.. UC6 : <<include>>
+UC2 <.. UC7 : <<include>>
+UC2 <.. UC8 : <<include>>
+UC2 <.. UC9 : <<include>>
+
+@enduml

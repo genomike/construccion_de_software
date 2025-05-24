@@ -1,0 +1,23 @@
+@startuml
+class Investigación {
+  -id: String
+  -fase: String
+  +iniciarInvestigación()
+  +cerrarInvestigación()
+}
+
+class Diligencia {
+  -tipo: String
+  -estado: String
+  +asignarResponsable()
+}
+
+class Prueba {
+  -tipo: String
+  -valoración: String
+  +analizarPrueba()
+}
+
+Investigación "1" --> "n" Diligencia
+Investigación "1" --> "n" Prueba
+@enduml

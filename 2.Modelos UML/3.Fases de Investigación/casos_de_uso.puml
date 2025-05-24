@@ -1,0 +1,19 @@
+@startuml
+left to right direction
+actor Fiscalía
+actor Policía
+
+rectangle "Sistema de Investigación" {
+  (Iniciar Investigación) as iniciar
+  (Gestionar Diligencias) as diligencias
+  (Evaluar Pruebas) as pruebas
+  (Decidir Acusación) as decisión
+}
+
+Fiscalía --> iniciar
+Fiscalía --> diligencias
+Fiscalía --> pruebas
+Fiscalía --> decisión
+Policía --> (Generar Informes)
+Policía --> (Ejecutar Diligencias)
+@enduml

@@ -1,0 +1,33 @@
+@startuml Casos de Uso Ejecución de Sentencia
+
+actor "Tribunal" as tribunal
+actor "Fiscalía" as fiscalia
+actor "Ente Ejecutor" as ejecutor
+actor "Condenado" as condenado
+
+rectangle "Sistema de Ejecución de Sentencias" {
+  usecase "Recibir y registrar sentencia" as UC1
+  usecase "Determinar tipo de ejecución" as UC2
+  usecase "Ejecutar pena" as UC3
+  usecase "Supervisar cumplimiento" as UC4
+  usecase "Cerrar caso y archivar" as UC5
+  usecase "Generar informe de ejecución" as UC6
+  usecase "Registrar cumplimiento" as UC7
+  usecase "Documentar cierre" as UC8
+}
+
+tribunal --> UC1
+fiscalia --> UC2
+ejecutor --> UC3
+fiscalia --> UC4
+tribunal --> UC5
+ejecutor --> UC6
+ejecutor --> UC7
+tribunal --> UC8
+
+UC5 ..> UC6 : <<incluye>>
+UC5 ..> UC7 : <<incluye>>
+UC5 ..> UC8 : <<incluye>>
+UC4 ..> UC7 : <<extiende>>
+
+@enduml

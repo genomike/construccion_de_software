@@ -1,0 +1,13 @@
+@startuml
+start
+:Mesa recibe denuncia;
+if (¿Datos válidos?) then (Sí)
+  :Registrar denuncia;
+  :Generar número de caso;
+  :Asignar a Fiscalía;
+  :Notificar al ciudadano;
+else (No)
+  :Rechazar denuncia;
+endif
+stop
+@enduml

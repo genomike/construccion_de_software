@@ -1,0 +1,52 @@
+@startuml Diagrama de Componentes de Ejecución de Sentencia
+
+package "Sistema de Ejecución de Sentencias" {
+  [Módulo de Recepción\ny Registro] as MRR
+  [Módulo de Clasificación\ny Determinación] as MCD
+  [Módulo de Ejecución\nde Penas] as MEP
+  [Módulo de Supervisión\ny Control] as MSC
+  [Módulo de Cierre\ny Archivo] as MCA
+  database "Base de Datos\nde Sentencias" as BDS
+  database "Base de Datos\nde Ejecuciones" as BDE
+  database "Base de Datos\nde Informes" as BDI
+}
+
+[Sistema de Gestión\nJudicial] as SGJ
+[Sistema de Centros\nPenitenciarios] as SCP
+[Sistema de Medidas\nAlternativas] as SMA
+[Portal de\nConsultas] as PC
+
+interface "API de Recepción" as API_REC
+interface "API de Ejecución" as API_EJEC
+interface "API de Supervisión" as API_SUP
+interface "API de Consulta" as API_CONS
+
+SGJ -- API_REC
+API_REC -- MRR
+MRR -- BDS
+MRR --> MCD
+
+MCD -- BDS
+MCD --> MEP
+
+MEP -- BDE
+MEP -- API_EJEC
+API_EJEC -- SCP
+API_EJEC -- SMA
+
+MEP --> MSC
+MSC -- BDE
+MSC -- API_SUP
+API_SUP -- SCP
+
+MSC --> MCA
+MCA -- BDS
+MCA -- BDE
+MCA -- BDI
+
+PC -- API_CONS
+API_CONS -- BDS
+API_CONS -- BDE
+API_CONS -- BDI
+
+@enduml

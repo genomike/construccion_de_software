@@ -1,0 +1,33 @@
+@startuml Trial Stage Activity Diagram
+
+start
+:Inicio de la audiencia;
+
+partition "5.1 Presentación de Pruebas" {
+  :Presentar pruebas documentales;
+  :Presentar pruebas materiales;
+  :Presentar pruebas testimoniales;
+  :Presentar pruebas periciales;
+}
+
+partition "5.2 Interrogatorio" {
+  :Interrogar a testigos;
+  :Interrogar a acusado;
+  :Interrogar a peritos;
+}
+
+partition "5.3 Deliberación del Juez" {
+  :Analizar pruebas;
+  :Evaluar testimonios;
+  :Considerar alegatos finales;
+}
+
+partition "5.4 Emisión de la sentencia" {
+  :Redactar sentencia;
+  :Leer sentencia en audiencia;
+  :Registrar sentencia en sistema;
+}
+
+stop
+
+@enduml

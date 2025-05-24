@@ -1,0 +1,16 @@
+@startuml
+component "Módulo Fiscal" as MF {
+  (Evaluador)
+  (Generador Órdenes)
+}
+
+component "Módulo Policía" as MP {
+  (Gestor Diligencias)
+}
+
+database "Base de Casos" as BD
+
+MF --> BD : Consulta casos
+MF --> MP : Envía requerimientos
+MP --> BD : Actualiza estado
+@enduml

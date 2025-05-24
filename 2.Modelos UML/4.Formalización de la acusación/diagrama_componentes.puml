@@ -1,0 +1,17 @@
+@startuml
+component "Módulo Fiscal" as MF {
+  [Editor Acusaciones]
+  [Validador Legal]
+}
+
+component "Juzgado" as J {
+  [Receptor Digital]
+  [Gestor Expedientes]
+}
+
+component "Notificaciones" as N
+
+MF --> J : Envío documentación
+MF --> N : Disparar notificaciones
+J --> N : Confirmar recepción
+@enduml

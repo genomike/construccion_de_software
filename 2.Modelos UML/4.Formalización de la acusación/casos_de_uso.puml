@@ -1,0 +1,20 @@
+@startuml
+left to right direction
+actor Fiscalía
+actor Juzgado
+actor Imputado
+
+rectangle "Proceso Penal" {
+  (Revisar Pruebas) as revisar
+  (Generar Acusación) as acusar
+  (Notificar Partes) as notificar
+  (Remitir al Juzgado) as remitir
+}
+
+Fiscalía --> revisar
+Fiscalía --> acusar
+Fiscalía --> notificar
+Fiscalía --> remitir
+Juzgado --> (Recibir Acusación)
+Imputado --> (Recibir Notificación)
+@enduml

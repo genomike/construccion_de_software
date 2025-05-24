@@ -1,0 +1,7 @@
+@startuml
+[*] --> Iniciada
+Iniciada --> Registrada: Validación
+Registrada --> Asignada: Asignación
+Asignada --> Procesada: Revisión
+Procesada --> [*]
+@enduml

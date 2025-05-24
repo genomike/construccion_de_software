@@ -1,0 +1,60 @@
+@startuml Diagrama de Estados de Ejecución de Sentencia
+
+[*] --> SentenciaRecibida : Recepción de sentencia
+
+state SentenciaRecibida {
+  [*] --> Registrada : Registrar
+  Registrada --> [*] : Clasificar
+}
+
+SentenciaRecibida --> TipoEjecucionDeterminado : Determinar tipo de ejecución
+
+state TipoEjecucionDeterminado {
+  [*] --> PrivativaLibertad : Si es prisión
+  [*] --> MedidaAlternativa : Si es alternativa
+  [*] --> Multa : Si es económica
+}
+
+TipoEjecucionDeterminado --> EjecucionEnCurso : Iniciar ejecución
+
+state EjecucionEnCurso {
+  [*] --> Activa
+  Activa --> Suspendida : Suspender
+  Suspendida --> Activa : Reactivar
+  
+  state Activa {
+    [*] --> FaseInicial
+    FaseInicial --> FaseIntermedia : Avanzar
+    FaseIntermedia --> FaseFinal : Avanzar
+  }
+}
+
+EjecucionEnCurso --> SupervisionActiva : Supervisar
+
+state SupervisionActiva {
+  [*] --> ControlInicial
+  ControlInicial --> ControlPeriodico : Programar controles
+  ControlPeriodico --> ControlPeriodico : Realizar control
+  ControlPeriodico --> ControlFinal : Finalizar controles
+}
+
+SupervisionActiva --> [*] : Incumplimiento\ndetectado
+
+SupervisionActiva --> CumplimientoVerificado : Verificar cumplimiento total
+
+state CumplimientoVerificado {
+  [*] --> DocumentacionGenerada
+  DocumentacionGenerada --> InformeEmitido
+  InformeEmitido --> CierreTramitado
+}
+
+CumplimientoVerificado --> CasoCerrado : Cerrar caso
+
+state CasoCerrado {
+  [*] --> ArchivoProcesado
+  ArchivoProcesado --> ExpedienteArchivado
+}
+
+CasoCerrado --> [*] : Fin del proceso
+
+@enduml

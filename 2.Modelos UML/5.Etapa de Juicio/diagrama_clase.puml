@@ -1,0 +1,84 @@
+@startuml Trial Stage Class Diagram
+
+class Juicio {
+  +id: String
+  +fecha: Date
+  +estado: EstadoJuicio
+  +iniciarAudiencia()
+  +finalizarAudiencia()
+}
+
+class Prueba {
+  +id: String
+  +descripcion: String
+  +fechaPresentacion: Date
+  +presentar()
+  +validar()
+}
+
+class PruebaDocumental extends Prueba {
+  +tipoDocumento: String
+  +contenido: String
+  +autenticar()
+}
+
+class PruebaMaterial extends Prueba {
+  +descripcionFisica: String
+  +ubicacionAlmacenamiento: String
+  +verificarCadenacustodia()
+}
+
+class PruebaTestimonial extends Prueba {
+  +testigo: Persona
+  +declaracion: String
+  +grabar()
+}
+
+class PruebaPericial extends Prueba {
+  +perito: Persona
+  +especialidad: String
+  +informe: String
+  +validarCredenciales()
+}
+
+class Persona {
+  +id: String
+  +nombre: String
+  +apellido: String
+  +documento: String
+}
+
+class Juez extends Persona {
+  +deliberar()
+  +emitirSentencia()
+}
+
+class Sentencia {
+  +id: String
+  +contenido: String
+  +fecha: Date
+  +resultado: ResultadoSentencia
+  +redactar()
+  +emitir()
+  +registrar()
+}
+
+enum ResultadoSentencia {
+  CONDENATORIO
+  ABSOLUTORIO
+  SOBRESEIMIENTO
+  NULIDAD
+}
+
+enum EstadoJuicio {
+  PROGRAMADO
+  EN_CURSO
+  FINALIZADO
+  SUSPENDIDO
+}
+
+Juicio "1" -- "1" Juez
+Juicio "1" -- "0..1" Sentencia
+Juicio "1" -- "*" Prueba
+
+@enduml

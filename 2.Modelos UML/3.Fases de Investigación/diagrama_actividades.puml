@@ -1,0 +1,16 @@
+@startuml
+start
+:Fiscalía inicia investigación;
+repeat
+  :Solicitar diligencias específicas;
+  :Policía ejecuta diligencias;
+  :Recibir informes;
+  :Evaluar pruebas;
+repeat while (¿Necesita más datos?)
+if (¿Pruebas concluyentes?) then (Sí)
+  :Presentar acusación;
+else (No)
+  :Sobreseer caso;
+endif
+stop
+@enduml

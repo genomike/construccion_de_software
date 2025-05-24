@@ -1,0 +1,21 @@
+@startuml
+skinparam monochrome true
+skinparam defaultTextAlignment center
+
+rectangle "Planificación" as A
+rectangle "Desarrollo" as B
+rectangle "Pruebas" as C
+rectangle "Despliegue" as D
+rectangle "Monitoreo" as E
+rectangle "Security Gates" as F
+
+A --> B
+B --> C
+C --> D
+D --> E
+E --> A
+
+F --> B
+F --> C
+F --> D
+@enduml

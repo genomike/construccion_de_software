@@ -1,0 +1,14 @@
+@startuml
+participant Fiscalía
+participant Sistema
+participant Policía
+
+Fiscalía -> Sistema: Revisar denuncia
+alt ¿Requiere investigación?
+    Fiscalía -> Sistema: Generar órdenes
+    Sistema -> Policía: Derivar caso
+    Policía --> Sistema: Confirmar recepción
+else
+    Fiscalía -> Sistema: Archivar caso
+end
+@enduml

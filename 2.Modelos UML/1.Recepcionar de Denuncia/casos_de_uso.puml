@@ -1,0 +1,18 @@
+@startuml
+left to right direction
+actor Ciudadano
+actor Fiscalía
+actor "Mesa de Partes" as Mesa
+
+rectangle "Sistema de Denuncias" {
+  (Notificar Caso) as notificar
+  (Generar Denuncia) as generar
+  (Registrar Denuncia) as registrar
+  (Asignar a Fiscalía) as asignar
+}
+
+Ciudadano --> notificar
+Mesa --> generar
+Mesa --> registrar
+Fiscalía --> asignar
+@enduml

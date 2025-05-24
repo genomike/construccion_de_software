@@ -1,0 +1,7 @@
+@startuml
+[*] --> En_Revisión
+En_Revisión --> Derivado: requiere investigación
+Derivado --> En_Proceso: policía recibe
+En_Proceso --> Cerrado: diligencias completas
+En_Revisión --> Archivado: sin mérito
+@enduml

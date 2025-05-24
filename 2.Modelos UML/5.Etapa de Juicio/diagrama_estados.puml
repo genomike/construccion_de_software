@@ -1,0 +1,44 @@
+@startuml Trial Stage State Diagram
+
+[*] --> EtapaJuicioIniciada : Juez inicia audiencia
+
+state EtapaJuicioIniciada {
+  [*] --> PresentacionPruebas
+  PresentacionPruebas --> Interrogatorio : Pruebas registradas
+  Interrogatorio --> DeliberacionJuez : Interrogatorio completo
+  DeliberacionJuez --> EmisionSentencia : Deliberación completa
+  EmisionSentencia --> [*]
+}
+
+state PresentacionPruebas {
+  [*] --> RecopilacionPruebas
+  RecopilacionPruebas --> ValidacionPruebas
+  ValidacionPruebas --> PruebasRegistradas
+  PruebasRegistradas --> [*]
+}
+
+state Interrogatorio {
+  [*] --> InterrogatorioTestigos
+  InterrogatorioTestigos --> InterrogatorioAcusado
+  InterrogatorioAcusado --> InterrogatorioPeritos
+  InterrogatorioPeritos --> AlegatoriasFinal
+  AlegatoriasFinal --> [*]
+}
+
+state DeliberacionJuez {
+  [*] --> AnalisisPruebas
+  AnalisisPruebas --> EvaluacionTestimonios
+  EvaluacionTestimonios --> FormulacionDecision
+  FormulacionDecision --> [*]
+}
+
+state EmisionSentencia {
+  [*] --> RedaccionSentencia
+  RedaccionSentencia --> LecturaSentencia
+  LecturaSentencia --> RegistroSentencia
+  RegistroSentencia --> [*]
+}
+
+EtapaJuicioIniciada --> [*] : Sentencia emitida
+
+@enduml

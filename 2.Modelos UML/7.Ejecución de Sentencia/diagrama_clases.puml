@@ -1,0 +1,136 @@
+@startuml Diagrama de Clases de Ejecución de Sentencia
+
+class Sentencia {
+  +id: String
+  +fechaEmision: Date
+  +tipoPena: TipoPena
+  +duracion: int
+  +estado: EstadoSentencia
+  +registrar()
+  +actualizarEstado()
+}
+
+class Ejecucion {
+  +id: String
+  +fechaInicio: Date
+  +fechaFin: Date
+  +tipoEjecucion: TipoEjecucion
+  +estado: EstadoEjecucion
+  +iniciar()
+  +suspender()
+  +reanudar()
+  +finalizar()
+}
+
+class InformeEjecucion {
+  +id: String
+  +fecha: Date
+  +detalles: String
+  +observaciones: String
+  +generar()
+  +validar()
+}
+
+class CumplimientoCondena {
+  +id: String
+  +fechaCumplimiento: Date
+  +porcentajeAvance: float
+  +observaciones: String
+  +registrarAvance()
+  +verificarComplecion()
+}
+
+class CierreCaso {
+  +id: String
+  +fechaCierre: Date
+  +motivo: MotivoCierre
+  +documentos: List<String>
+  +cerrar()
+  +archivar()
+}
+
+class Tribunal {
+  +id: String
+  +nombre: String
+  +jurisdiccion: String
+  +recibirSentencia()
+  +verificarCumplimiento()
+  +cerrarCaso()
+}
+
+class Fiscalia {
+  +id: String
+  +nombre: String
+  +jurisdiccion: String
+  +determinarTipoEjecucion()
+  +supervisarCumplimiento()
+}
+
+class EnteEjecutor {
+  +id: String
+  +tipo: TipoEnte
+  +ubicacion: String
+  +ejecutarPena()
+  +reportarAvance()
+  +informarCumplimiento()
+}
+
+class Condenado {
+  +id: String
+  +nombre: String
+  +identificacion: String
+  +perfil: String
+  +historial: String
+}
+
+enum TipoPena {
+  PRIVATIVA_LIBERTAD
+  MULTA
+  TRABAJOS_COMUNITARIOS
+  LIBERTAD_CONDICIONAL
+  ARRESTO_DOMICILIARIO
+}
+
+enum EstadoSentencia {
+  EMITIDA
+  EN_EJECUCION
+  SUSPENDIDA
+  CUMPLIDA
+  PRESCRITA
+}
+
+enum EstadoEjecucion {
+  PENDIENTE
+  INICIADA
+  EN_PROGRESO
+  SUSPENDIDA
+  COMPLETADA
+  CANCELADA
+}
+
+enum TipoEjecucion {
+  RECLUSION
+  SUPERVISION_COMUNITARIA
+  PAGO_MULTA
+  MEDIDAS_ALTERNATIVAS
+}
+
+enum MotivoCierre {
+  CUMPLIMIENTO_TOTAL
+  PRESCRIPCION
+  INDULTO
+  AMNISTIA
+  FALLECIMIENTO
+  REVOCACION
+}
+
+Tribunal "1" -- "n" Sentencia : emite >
+Fiscalia "1" -- "n" Ejecucion : supervisa >
+EnteEjecutor "1" -- "n" Ejecucion : implementa >
+Sentencia "1" -- "1" Ejecucion : origina >
+Ejecucion "1" -- "n" InformeEjecucion : genera >
+Ejecucion "1" -- "1" CumplimientoCondena : registra >
+Ejecucion "1" -- "0..1" CierreCaso : concluye con >
+Condenado "1" -- "n" Ejecucion : sujeto a >
+
+@enduml

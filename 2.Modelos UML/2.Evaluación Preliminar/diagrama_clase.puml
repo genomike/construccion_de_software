@@ -1,0 +1,23 @@
+@startuml
+class Evaluación {
+  -id: String
+  -fechaInicio: Date
+  -estado: String
+  +iniciarEvaluación()
+  +derivarAPolicía()
+}
+
+class Diligencia {
+  -tipo: String
+  -prioridad: Int
+  +generarOrden()
+}
+
+class Fiscal {
+  -nombre: String
+  +revisarCaso()
+}
+
+Evaluación "1" --> "n" Diligencia
+Fiscal "1" --> "n" Evaluación
+@enduml

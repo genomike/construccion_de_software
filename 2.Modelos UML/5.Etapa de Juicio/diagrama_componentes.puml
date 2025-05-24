@@ -1,0 +1,34 @@
+@startuml Trial Stage Component Diagram
+
+package "Sistema de Gestión de Juicios" {
+  [Gestor de Audiencias] as GA
+  [Gestor de Pruebas] as GP
+  [Gestor de Sentencias] as GS
+  [Gestor de Usuario] as GU
+  database "Base de Datos Judicial" as DB
+}
+
+[Interface de Usuario] as UI
+[Sistema de Archivo Digital] as SAD
+[Sistema de Notificaciones] as SN
+
+UI --> GA : usa
+UI --> GP : usa
+UI --> GS : usa
+UI --> GU : usa
+
+GA --> DB : persiste
+GP --> DB : persiste
+GS --> DB : persiste
+GU --> DB : persiste
+
+GP --> SAD : almacena pruebas digitales
+GS --> SN : envía notificaciones
+
+interface "API de Gestión de Pruebas" as API_GP
+interface "API de Emisión de Sentencias" as API_GS
+
+GP -- API_GP
+GS -- API_GS
+
+@enduml

@@ -1,0 +1,81 @@
+@startuml Trial Stage Sequence Diagram
+
+actor Juez
+actor Fiscal
+actor Defensor
+actor Acusado
+actor Testigo
+
+participant "Sistema\nJudicial" as SJ
+
+== Inicio de la audiencia ==
+
+Juez -> SJ : iniciarAudiencia()
+activate SJ
+SJ -> SJ : registrarInicioAudiencia()
+SJ --> Juez : confirmaciónInicio
+deactivate SJ
+
+== 5.1 Presentación de Pruebas ==
+
+Fiscal -> SJ : presentarPruebas(pruebasDocumentales)
+activate SJ
+SJ -> SJ : registrarPruebas()
+SJ --> Fiscal : pruebasRegistradas
+deactivate SJ
+
+Fiscal -> SJ : presentarPruebas(pruebasMateriales)
+activate SJ
+SJ -> SJ : registrarPruebas()
+SJ --> Fiscal : pruebasRegistradas
+deactivate SJ
+
+Defensor -> SJ : presentarPruebas(pruebasDefensa)
+activate SJ
+SJ -> SJ : registrarPruebas()
+SJ --> Defensor : pruebasRegistradas
+deactivate SJ
+
+== 5.2 Interrogatorio ==
+
+Fiscal -> Testigo : interrogar()
+Testigo -> SJ : responder()
+activate SJ
+SJ -> SJ : registrarTestimonio()
+deactivate SJ
+
+Defensor -> Testigo : contrainterrogar()
+Testigo -> SJ : responder()
+activate SJ
+SJ -> SJ : registrarTestimonio()
+deactivate SJ
+
+Fiscal -> Acusado : interrogar()
+Acusado -> SJ : responder()
+activate SJ
+SJ -> SJ : registrarTestimonio()
+deactivate SJ
+
+== 5.3 Deliberación del Juez ==
+
+Juez -> SJ : solicitarPruebas()
+activate SJ
+SJ --> Juez : entregarPruebas
+deactivate SJ
+
+Juez -> Juez : deliberar()
+note right: Análisis de pruebas y testimonios
+
+== 5.4 Emisión de la sentencia ==
+
+Juez -> SJ : emitirSentencia(contenido)
+activate SJ
+SJ -> SJ : registrarSentencia()
+SJ --> Juez : sentenciaRegistrada
+deactivate SJ
+
+Juez -> Fiscal : notificarSentencia()
+Juez -> Defensor : notificarSentencia()
+Juez -> Acusado : notificarSentencia()
+
+@enduml

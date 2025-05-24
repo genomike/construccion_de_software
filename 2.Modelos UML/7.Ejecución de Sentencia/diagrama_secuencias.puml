@@ -1,0 +1,95 @@
+@startuml Diagrama de Secuencia de Ejecución de Sentencia
+
+actor "Tribunal" as tribunal
+actor "Fiscalía" as fiscalia
+actor "Ente Ejecutor" as ejecutor
+actor "Condenado" as condenado
+
+participant "Sistema de\nEjecución\nde Sentencias" as SES
+
+== 7.1 Recepción y Registro de la Sentencia ==
+
+tribunal -> SES : enviarSentencia(sentenciaId)
+activate SES
+SES -> SES : registrarSentencia()
+note right: Se registran los datos de la sentencia
+SES --> tribunal : confirmacionRegistro
+deactivate SES
+
+== 7.2 Determinar tipo de Ejecución ==
+
+fiscalia -> SES : consultarSentencia(sentenciaId)
+activate SES
+SES --> fiscalia : datosSentencia
+deactivate SES
+
+fiscalia -> SES : determinarTipoEjecucion(sentenciaId, tipoEjecucion)
+activate SES
+SES -> SES : asignarTipoEjecucion()
+SES --> fiscalia : confirmacionAsignacion
+deactivate SES
+
+== 7.3 Ejecución de la pena ==
+
+fiscalia -> ejecutor : notificarEjecucion(sentenciaId, tipoEjecucion)
+ejecutor -> condenado : notificarInicioPena(sentenciaId)
+
+ejecutor -> SES : iniciarEjecucion(sentenciaId)
+activate SES
+SES -> SES : registrarInicioEjecucion()
+SES --> ejecutor : confirmacionInicio
+deactivate SES
+
+ejecutor -> SES : actualizarEstadoEjecucion(sentenciaId, avance)
+activate SES
+SES -> SES : registrarAvance()
+SES --> ejecutor : confirmacionActualizacion
+deactivate SES
+
+== 7.4 Supervisión y Control de cumplimiento ==
+
+fiscalia -> SES : programarSupervisiones(sentenciaId)
+activate SES
+SES -> SES : crearCalendarioSupervisiones()
+SES --> fiscalia : calendarioSupervisiones
+deactivate SES
+
+loop Supervisiones periódicas
+  fiscalia -> ejecutor : realizarVisitaControl(fechaVisita)
+  fiscalia -> SES : registrarResultadoControl(informeControlId)
+  activate SES
+  SES -> SES : actualizarExpedienteSupervision()
+  SES --> fiscalia : confirmacionRegistro
+  deactivate SES
+end
+
+== 7.5 Cierre del Caso y Archivo ==
+
+ejecutor -> SES : informarCumplimientoTotal(sentenciaId)
+activate SES
+SES -> SES : verificarCumplimiento()
+SES --> ejecutor : confirmacionVerificacion
+deactivate SES
+
+ejecutor -> SES : generarInformeEjecucion(sentenciaId)
+activate SES
+SES --> ejecutor : informeEjecucion
+deactivate SES
+
+ejecutor -> fiscalia : enviarInformeCumplimiento(informeEjecucionId)
+fiscalia -> tribunal : solicitarCierreCaso(sentenciaId, informeEjecucionId)
+
+tribunal -> SES : registrarCumplimientoCondena(sentenciaId)
+activate SES
+SES -> SES : marcarComoCompletada()
+SES --> tribunal : confirmacionCumplimiento
+deactivate SES
+
+tribunal -> SES : cerrarCaso(sentenciaId)
+activate SES
+SES -> SES : generarCierreCaso()
+SES -> SES : archivarExpediente()
+SES --> tribunal : confirmacionCierre
+deactivate SES
+
+@enduml

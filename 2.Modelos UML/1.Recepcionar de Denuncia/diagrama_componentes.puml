@@ -1,0 +1,10 @@
+@startuml
+component "Frontend" as FE
+component "Backend" as BE
+component "Base de Datos" as BD
+component "Servicio de Notificaciones" as SN
+
+FE --> BE : API REST
+BE --> BD : Almacenar
+BE --> SN : Enviar SMS/Email
+@enduml

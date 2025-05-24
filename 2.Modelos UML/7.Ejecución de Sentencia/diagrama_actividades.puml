@@ -1,0 +1,43 @@
+@startuml Diagrama de Actividades Simplificado
+
+|Tribunal|
+start
+:Recibir sentencia;
+:Registrar sentencia en sistema;
+
+|Fiscalía|
+:Analizar sentencia;
+:Determinar tipo de ejecución;
+
+|Ente Ejecutor|
+:Ejecutar la pena;
+:Implementar medidas de ejecución;
+
+|Fiscalía|
+:Supervisar cumplimiento;
+:Realizar controles periódicos;
+
+|Ente Ejecutor|
+:Registrar avance de cumplimiento;
+
+|Tribunal|
+:Verificar cumplimiento total;
+
+if (¿Cumplido?) then (Sí)
+  :Elaborar informe final;
+  :Registrar cumplimiento;
+  :Cerrar caso;
+else (No)
+  |Fiscalía|
+  :Ordenar correcciones;
+  |Ente Ejecutor|
+  :Ajustar implementación;
+  |Fiscalía|
+  :Continuar supervisión;
+endif
+
+|Tribunal|
+:Archivar expediente;
+stop
+
+@enduml
