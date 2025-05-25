@@ -1,2 +1,170 @@
 # Ignore cache directory in ModeloProcesosDeNegocio
 1.ModeloProcesosDeNegocio/cache/
+
+# Ignorar carpetas específicas independientemente de su ubicación
+.vs/
+bin/
+obj/
+Debug/
+Release/
+TestResults/
+
+# Usando la sintaxis doble asterisco para cualquier profundidad
+**/.vs/
+**/bin/
+**/obj/
+**/Debug/
+**/Release/
+**/TestResults/
+**/CopilotIndices/
+
+# Archivos y carpetas específicas de .NET - RUTAS MÁS ESPECÍFICAS
+**/.vs/
+**/bin/
+**/obj/
+**/Debug/
+**/Release/
+**/net8.0/
+**/net8.0-windows/
+**/[Dd]ebug/
+**/[Rr]elease/
+**/TestResults/
+**/x64/
+**/x86/
+**/[Ww][Ii][Nn]32/
+**/[Aa][Rr][Mm]/
+**/[Aa][Rr][Mm]64/
+**/bld/
+**/[Bb]uild/
+**/*.dll
+**/*.exe
+**/*.pdb
+
+# Archivos de Visual Studio
+**/.vs/
+**/*.suo
+**/*.user
+**/*.userosscache
+**/*.sln.docstates
+**/*.userprefs
+**/*.psess
+**/*.vsp
+**/*.vspx
+**/*.sap
+**/.vscode/
+**/*_i.c
+**/*_p.c
+**/*_h.h
+**/*.ilk
+**/*.meta
+**/*.obj
+**/*.pch
+**/*.pdb
+**/*.ipdb
+**/*.pgc
+**/*.pgd
+**/*.rsp
+**/*.sbr
+**/*.tlb
+**/*.tli
+**/*.tlh
+**/*.tmp
+**/*.tmp_proj
+**/*_wpftmp.csproj
+**/*.log
+**/*.vspscc
+**/*.vssscc
+**/*.pidb
+**/*.svclog
+**/*.scc
+
+# Paquetes NuGet
+**/packages/
+**/*.nupkg
+**/*.pfx
+**/*.snk
+# Excluir el archivo packages.config para conservar la información del paquete
+!**/packages.config
+
+# Publicación, copia de seguridad y bases de datos
+**/*.Publish.xml
+**/*.publishproj
+**/*.publishsettings
+**/*.pubxml
+**/*.dbmdl
+**/*.dbproj.schemaview
+**/*.jfm
+**/*.pfx
+**/*.SQLite
+**/*.db
+**/*.mdf
+**/*.ldf
+**/*.ndf
+
+# Herramientas de desarrollo y archivos temporales
+**/_ReSharper*/
+**/*.[Rr]e[Ss]harper
+**/*.DotSettings.user
+**/_TeamCity*
+**/*.dotCover
+**/*.coverage
+**/*.coveragexml
+**/*.[Cc]achefile
+**/*.VC.db
+**/*.VC.VC.opendb
+**/*.gpState
+
+# Archivos de Windows
+**/Thumbs.db
+**/ehthumbs.db
+**/Desktop.ini
+
+# Archivos de macOS
+**/.DS_Store
+**/.AppleDouble
+**/.LSOverride
+
+# Archivos específicos de desarrollo
+**/node_modules/
+**/bower_components/
+**/*.local.json
+
+# Archivos específicos detectados en el proyecto
+**/*.vsidx
+**/*.db-shm
+**/*.db-wal
+**/*.AssemblyInfo.cs
+**/*.AssemblyInfoInputs.cache
+**/*.csproj.FileListAbsolute.txt
+**/SemanticSymbols.db
+**/SemanticSymbols.db-shm
+**/SemanticSymbols.db-wal
+**/.dtbcache.v2
+**/*.futdcache.v2
+**/*.backup.json
+**/*.json
+**/*.bin
+**/*.vsidx
+
+# Ignora todos los archivos en cualquier directorio llamado FileContentIndex
+**/FileContentIndex/
+**/FileContentIndex/**
+
+# Patrones más específicos para mejorar la precisión
+7.Aplicacion/EtapaDeJuicio/.vs/
+7.Aplicacion/EtapaDeJuicio/v17/
+7.Aplicacion/EtapaDeJuicio/.vs/EtapaDeJuicio/
+7.Aplicacion/EtapaDeJuicio/vs/EtapaDeJuicio/
+7.Aplicacion/EtapaDeJuicio/.vs/**/*
+**/appsettings.json
+**/appsettings.Development.json
+**/ProjectEvaluation/**
+
+# Archivos específicos a ignorar
+**/*.deps.json
+**/*.dll
+**/*.exe
+**/*GestorDeAudiencias*
+
+# Rutas absolutas (usar solo si es necesario)
+c:/Users/genoc/OneDrive/Documentos/Maestria/ConstrucciónDeSoftware/PAC/7.Aplicacion/EtapaDeJuicio/.vs/
