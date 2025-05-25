@@ -1,170 +1,112 @@
-# Ignore cache directory in ModeloProcesosDeNegocio
-1.ModeloProcesosDeNegocio/cache/
-
-# Ignorar carpetas específicas independientemente de su ubicación
+# Archivos y carpetas específicos de Visual Studio
 .vs/
+.vscode/
 bin/
+cache/
 obj/
-Debug/
-Release/
+*/[Dd]ebug/
+*/[Rr]elease/
+x64/
+x86/
+[Aa][Rr][Mm]/
+[Aa][Rr][Mm]64/
+bld/
+[Bb]in/
+[Oo]bj/
+[Ll]og/
+[Ll]ogs/
+
+# Archivos de usuario de Visual Studio
+*.rsuser
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# Archivos de caché de herramientas de compilación
+.vs/
+# Uncomment if you have tasks that create the project's static files in wwwroot
+#wwwroot/
+
+# Archivos generados por Visual Studio
+*_i.c
+*_p.c
+*_h.h
+*.ilk
+*.meta
+*.obj
+*.iobj
+*.pch
+*.pdb
+*.ipdb
+*.pgc
+*.pgd
+*.rsp
+*.sbr
+*.tlb
+*.tli
+*.tlh
+*.tmp
+*.tmp_proj
+*_wpftmp.csproj
+*.log
+*.vspscc
+*.vssscc
+.builds
+*.pidb
+*.svclog
+*.scc
+
+# Carpetas NuGet
+packages/
+*.nupkg
+# Carpeta packages se puede incluir si se recrean desde los paquetes nuget
+# **/packages/*
+# excepto build/, que se usa en CI
+!**/packages/build/
+# Descomenta si es necesario recrear paquetes de herramientas en lugar de usar el restore de NuGet
+#!**/packages/repositories.config
+
+# Resultados de prueba y cobertura
 TestResults/
+[Cc]overage/
+*.coverage
+*.coveragexml
 
-# Usando la sintaxis doble asterisco para cualquier profundidad
-**/.vs/
-**/bin/
-**/obj/
-**/Debug/
-**/Release/
-**/TestResults/
-**/CopilotIndices/
+# Archivos de configuración local
+appsettings.Development.json
+appsettings.local.json
+appsettings.*.json
+!appsettings.json
+!appsettings.Example.json
 
-# Archivos y carpetas específicas de .NET - RUTAS MÁS ESPECÍFICAS
-**/.vs/
-**/bin/
-**/obj/
-**/Debug/
-**/Release/
-**/net8.0/
-**/net8.0-windows/
-**/[Dd]ebug/
-**/[Rr]elease/
-**/TestResults/
-**/x64/
-**/x86/
-**/[Ww][Ii][Nn]32/
-**/[Aa][Rr][Mm]/
-**/[Aa][Rr][Mm]64/
-**/bld/
-**/[Bb]uild/
-**/*.dll
-**/*.exe
-**/*.pdb
+# Archivos sensibles
+*.jks
+*.keystore
+*.pfx
+*.publishsettings
 
-# Archivos de Visual Studio
-**/.vs/
-**/*.suo
-**/*.user
-**/*.userosscache
-**/*.sln.docstates
-**/*.userprefs
-**/*.psess
-**/*.vsp
-**/*.vspx
-**/*.sap
-**/.vscode/
-**/*_i.c
-**/*_p.c
-**/*_h.h
-**/*.ilk
-**/*.meta
-**/*.obj
-**/*.pch
-**/*.pdb
-**/*.ipdb
-**/*.pgc
-**/*.pgd
-**/*.rsp
-**/*.sbr
-**/*.tlb
-**/*.tli
-**/*.tlh
-**/*.tmp
-**/*.tmp_proj
-**/*_wpftmp.csproj
-**/*.log
-**/*.vspscc
-**/*.vssscc
-**/*.pidb
-**/*.svclog
-**/*.scc
+# Archivos de caché y directorios
+# para más información sobre archivos temp de ReSharper, ver https://youtrack.jetbrains.com/issue/RIDER-13018
+_ReSharper*/
+*.[Rr]e[Ss]harper
+*.DotSettings.user
 
-# Paquetes NuGet
-**/packages/
-**/*.nupkg
-**/*.pfx
-**/*.snk
-# Excluir el archivo packages.config para conservar la información del paquete
-!**/packages.config
+# Rider
+.idea/
+*.sln.iml
 
-# Publicación, copia de seguridad y bases de datos
-**/*.Publish.xml
-**/*.publishproj
-**/*.publishsettings
-**/*.pubxml
-**/*.dbmdl
-**/*.dbproj.schemaview
-**/*.jfm
-**/*.pfx
-**/*.SQLite
-**/*.db
-**/*.mdf
-**/*.ldf
-**/*.ndf
+# Carpetas y archivos de publicación
+publish/
+**/Properties/PublishProfiles/*.pubxml
+**/Properties/ServiceDependencies/
+**/Properties/serviceDependencies.local.json
 
-# Herramientas de desarrollo y archivos temporales
-**/_ReSharper*/
-**/*.[Rr]e[Ss]harper
-**/*.DotSettings.user
-**/_TeamCity*
-**/*.dotCover
-**/*.coverage
-**/*.coveragexml
-**/*.[Cc]achefile
-**/*.VC.db
-**/*.VC.VC.opendb
-**/*.gpState
+# Bases de datos
+*.mdf
+*.ldf
+*.ndf
 
-# Archivos de Windows
-**/Thumbs.db
-**/ehthumbs.db
-**/Desktop.ini
-
-# Archivos de macOS
-**/.DS_Store
-**/.AppleDouble
-**/.LSOverride
-
-# Archivos específicos de desarrollo
-**/node_modules/
-**/bower_components/
-**/*.local.json
-
-# Archivos específicos detectados en el proyecto
-**/*.vsidx
-**/*.db-shm
-**/*.db-wal
-**/*.AssemblyInfo.cs
-**/*.AssemblyInfoInputs.cache
-**/*.csproj.FileListAbsolute.txt
-**/SemanticSymbols.db
-**/SemanticSymbols.db-shm
-**/SemanticSymbols.db-wal
-**/.dtbcache.v2
-**/*.futdcache.v2
-**/*.backup.json
-**/*.json
-**/*.bin
-**/*.vsidx
-
-# Ignora todos los archivos en cualquier directorio llamado FileContentIndex
-**/FileContentIndex/
-**/FileContentIndex/**
-
-# Patrones más específicos para mejorar la precisión
-7.Aplicacion/EtapaDeJuicio/.vs/
-7.Aplicacion/EtapaDeJuicio/v17/
-7.Aplicacion/EtapaDeJuicio/.vs/EtapaDeJuicio/
-7.Aplicacion/EtapaDeJuicio/vs/EtapaDeJuicio/
-7.Aplicacion/EtapaDeJuicio/.vs/**/*
-**/appsettings.json
-**/appsettings.Development.json
-**/ProjectEvaluation/**
-
-# Archivos específicos a ignorar
-**/*.deps.json
-**/*.dll
-**/*.exe
-**/*GestorDeAudiencias*
-
-# Rutas absolutas (usar solo si es necesario)
-c:/Users/genoc/OneDrive/Documentos/Maestria/ConstrucciónDeSoftware/PAC/7.Aplicacion/EtapaDeJuicio/.vs/
+# Archivos del sistema
+.DS_Store
+Thumbs.db
