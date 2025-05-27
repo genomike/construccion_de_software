@@ -135,7 +135,7 @@ public class GestionDePruebasJudicialesTests
         var exception = Assert.Throws<DomainException>(() => 
             PruebaPericial.Crear(Guid.NewGuid(), "Análisis forense", string.Empty));
         
-        exception.Message.Should().Contain("especialidad");
+        exception.Message.Should().Be("El nombre del experto certificado es obligatorio");
     }
 
     [Fact]

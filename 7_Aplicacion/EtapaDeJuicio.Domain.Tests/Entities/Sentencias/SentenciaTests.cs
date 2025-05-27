@@ -24,7 +24,7 @@ public class SentenciaTests
         sentencia.JuezId.Should().Be(juezId);
         sentencia.Descripcion.Should().Be(descripcion);
         sentencia.Tipo.Should().Be(tipo);
-        sentencia.FechaEmision.Should().BeCloseTo(DateTime.UtcNow, TimeSpan.FromMinutes(1));
+        sentencia.FechaEmision.Should().BeCloseTo(DateTime.Now, TimeSpan.FromMinutes(1));
         sentencia.Resolutivos.Should().BeEmpty();
     }
 

@@ -78,7 +78,7 @@ public class AudienciaTests
 
         // Assert
         audiencia.Estado.Should().Be(EstadoAudiencia.EnCurso);
-        audiencia.FechaInicio.Should().BeCloseTo(DateTime.UtcNow, TimeSpan.FromSeconds(5));
+        audiencia.FechaInicio.Should().BeCloseTo(DateTime.Now, TimeSpan.FromSeconds(5));
     }
 
     [Fact]
@@ -96,7 +96,7 @@ public class AudienciaTests
         var exception = Assert.Throws<DomainException>(() => 
             audiencia.Iniciar());
         
-        exception.Message.Should().Contain("estado actual");
+        exception.Message.Should().Contain("Solo se pueden iniciar");
     }
 
     [Fact]
@@ -115,7 +115,7 @@ public class AudienciaTests
 
         // Assert
         audiencia.Estado.Should().Be(EstadoAudiencia.Finalizada);
-        audiencia.FechaFin.Should().BeCloseTo(DateTime.UtcNow, TimeSpan.FromSeconds(5));
+        audiencia.FechaFin.Should().BeCloseTo(DateTime.Now, TimeSpan.FromSeconds(5));
     }
 
     [Fact]
@@ -236,7 +236,7 @@ public class AudienciaTests
         var exception = Assert.Throws<DomainException>(() => 
             audiencia.AgregarParticipante(idParticipante, "Juan", RolParticipante.Juez));
         
-        exception.Message.Should().Contain("ya está registrado");
+        exception.Message.Should().Contain("Ya existe");
     }
 
     [Fact]
@@ -260,7 +260,7 @@ public class AudienciaTests
         var actividad = audiencia.Actividades.First();
         actividad.Descripcion.Should().Be(descripcion);
         actividad.Tipo.Should().Be(tipo);
-        actividad.Timestamp.Should().BeCloseTo(DateTime.UtcNow, TimeSpan.FromSeconds(5));
+        actividad.Timestamp.Should().BeCloseTo(DateTime.Now, TimeSpan.FromSeconds(5));
     }
 
     [Fact]

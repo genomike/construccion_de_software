@@ -15,7 +15,7 @@ public class GestionDeDeliberacionTests
         // Arrange
         var id = Guid.NewGuid();
         var descripcion = "Deliberación del caso 001/2025";
-        var fechaInicio = DateTime.UtcNow;
+        var fechaInicio = DateTime.Now;
 
         // Act
         var deliberacion = Deliberacion.Crear(id, descripcion, fechaInicio);
@@ -36,7 +36,7 @@ public class GestionDeDeliberacionTests
     {
         // Arrange
         var descripcion = "Deliberación caso test";
-        var fechaInicio = DateTime.UtcNow;
+        var fechaInicio = DateTime.Now;
 
         // Act & Assert
         var act = () => Deliberacion.Crear(Guid.Empty, descripcion, fechaInicio);
@@ -52,7 +52,7 @@ public class GestionDeDeliberacionTests
     {
         // Arrange
         var id = Guid.NewGuid();
-        var fechaInicio = DateTime.UtcNow;
+        var fechaInicio = DateTime.Now;
 
         // Act & Assert
         var act = () => Deliberacion.Crear(id, descripcion, fechaInicio);
@@ -265,7 +265,7 @@ public class GestionDeDeliberacionTests
     {
         // Arrange
         var deliberacion = CrearDeliberacionBasica();
-        var prueba = PruebaDocumental.Crear(Guid.NewGuid(), "Prueba documental", "Contenido del documento");
+        var prueba = PruebaDocumental.Crear(Guid.NewGuid(), "Prueba documental","ContenidoDelDocumento.pdf");
         var valoracion = 0.90m;
         var justificacion = "Documento auténtico y relevante";
 
@@ -377,7 +377,7 @@ public class GestionDeDeliberacionTests
     public void Deliberacion_ObtenerDuracion_DeliberacionSinFinalizar_DeberiaCalcularDuracionHastaAhora()
     {
         // Arrange
-        var fechaInicio = DateTime.UtcNow.AddHours(-2);
+        var fechaInicio = DateTime.Now.AddHours(-2);
         var deliberacion = Deliberacion.Crear(Guid.NewGuid(), "Test", fechaInicio);
 
         // Act
@@ -391,7 +391,7 @@ public class GestionDeDeliberacionTests
     public void Deliberacion_ObtenerDuracion_DeliberacionFinalizada_DeberiaCalcularDuracionTotal()
     {
         // Arrange
-        var fechaInicio = DateTime.UtcNow.AddHours(-3);
+        var fechaInicio = DateTime.Now.AddHours(-3);
         var deliberacion = Deliberacion.Crear(Guid.NewGuid(), "Test", fechaInicio);
         deliberacion.AgregarConsiderando("Considerando test");
         deliberacion.Finalizar();
@@ -465,7 +465,7 @@ public class GestionDeDeliberacionTests
         deliberacion.EstaFinalizada.Should().BeTrue();
         deliberacion.Estado.Should().Be(EstadoDeliberacion.Finalizada);
         deliberacion.FechaFin.Should().NotBeNull();
-        deliberacion.FechaFin.Should().BeCloseTo(DateTime.UtcNow, TimeSpan.FromMinutes(1));
+        deliberacion.FechaFin.Should().BeCloseTo(DateTime.Now, TimeSpan.FromMinutes(1));
     }
 
     [Fact]
@@ -559,7 +559,7 @@ public class GestionDeDeliberacionTests
         return Deliberacion.Crear(
             Guid.NewGuid(),
             "Deliberación de prueba",
-            DateTime.UtcNow
+            DateTime.Now
         );
     }    private static PruebaJudicial CrearPruebaBasica()
     {

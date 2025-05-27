@@ -20,7 +20,7 @@ public class DeliberacionJudicialTests
         deliberacion.Should().NotBeNull();
         deliberacion.Id.Should().Be(id);
         deliberacion.CasoNumero.Should().Be(casoNumero);
-        deliberacion.FechaInicio.Should().BeCloseTo(DateTime.UtcNow, TimeSpan.FromMinutes(1));
+        deliberacion.FechaInicio.Should().BeCloseTo(DateTime.Now, TimeSpan.FromMinutes(1));
         deliberacion.FechaFinalizacion.Should().BeNull();
         deliberacion.EstaFinalizada.Should().BeFalse();
         deliberacion.Considerandos.Should().BeEmpty();
@@ -170,6 +170,6 @@ public class DeliberacionJudicialTests
 
         // Assert
         deliberacion.EstaFinalizada.Should().BeTrue();
-        deliberacion.FechaFinalizacion.Should().BeCloseTo(DateTime.UtcNow, TimeSpan.FromMinutes(1));
+        deliberacion.FechaFinalizacion.Should().BeCloseTo(DateTime.Now, TimeSpan.FromMinutes(1));
     }
 }

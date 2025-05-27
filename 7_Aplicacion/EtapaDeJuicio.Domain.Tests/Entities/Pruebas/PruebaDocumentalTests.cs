@@ -23,7 +23,7 @@ public class PruebaDocumentalTests
         prueba.Descripcion.Should().Be(descripcion);
         prueba.RutaArchivo.Should().Be(rutaArchivo);
         prueba.TipoPrueba.Should().Be(TipoPrueba.Documental);
-        prueba.FechaRegistro.Should().BeCloseTo(DateTime.UtcNow, TimeSpan.FromSeconds(5));
+        prueba.FechaRegistro.Should().BeCloseTo(DateTime.Now, TimeSpan.FromSeconds(5));
     }
 
     [Theory]
@@ -108,7 +108,7 @@ public class PruebaDocumentalTests
         var exception = Assert.Throws<DomainException>(() => 
             PruebaDocumental.Crear(id, descripcion, rutaArchivo));
         
-        exception.Message.Should().Contain("formato no permitido");
+        exception.Message.Should().Contain("formato no está permitido");
     }
 
     [Fact]
@@ -152,7 +152,7 @@ public class PruebaDocumentalTests
 
         // Assert
         prueba.EstaVerificada.Should().BeTrue();
-        prueba.FechaVerificacion.Should().BeCloseTo(DateTime.UtcNow, TimeSpan.FromSeconds(5));
+        prueba.FechaVerificacion.Should().BeCloseTo(DateTime.Now, TimeSpan.FromSeconds(5));
     }
 
     [Fact]

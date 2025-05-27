@@ -32,7 +32,7 @@ public class Pregunta
         Id = id;
         Texto = texto;
         Tipo = tipo;
-        FechaHora = DateTime.UtcNow;
+        FechaHora = DateTime.Now;
         EsValida = ValidarTipoPregunta(texto, tipo);
     }
 

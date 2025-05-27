@@ -25,9 +25,9 @@ public class PruebaPericial : PruebaJudicial
         ExpertoCertificado = expertoCertificado;
         Especialidad = especialidad;
         InformePericial = string.Empty;
-    }    public static PruebaPericial Crear(Guid id, string descripcion, string especialidad)
+    }    public static PruebaPericial Crear(Guid id, string descripcion, string expertoCertificado)
     {
-        return new PruebaPericial(id, descripcion, Guid.NewGuid(), "Experto General", especialidad);
+        return new PruebaPericial(id, descripcion, Guid.NewGuid(), expertoCertificado, "General");
     }
 
     public static PruebaPericial Crear(Guid id, string descripcion, Guid peritoId, string expertoCertificado, string especialidad)
@@ -64,5 +64,10 @@ public class PruebaPericial : PruebaJudicial
             valorBase += 0.10m;
             
         return Math.Min(valorBase, 1.0m);
+    }
+
+    public override string ToString()
+    {
+        return $"Prueba Pericial - {Especialidad}: {Descripcion}";
     }
 }

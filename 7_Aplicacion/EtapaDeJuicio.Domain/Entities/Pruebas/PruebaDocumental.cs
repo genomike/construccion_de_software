@@ -20,7 +20,7 @@ public class PruebaDocumental : PruebaJudicial
 
         RutaArchivo = rutaArchivo;
         Formato = FormatoArchivo.Create(rutaArchivo);
-        FechaRegistro = DateTime.UtcNow;
+        FechaRegistro = DateTime.Now;
         EstaVerificada = false;
     }
 
@@ -40,8 +40,10 @@ public class PruebaDocumental : PruebaJudicial
     public void MarcarComoVerificada()
     {
         EstaVerificada = true;
-        FechaVerificacion = DateTime.UtcNow;
-    }    public override decimal CalcularValorProbatorio()
+        FechaVerificacion = DateTime.Now;
+    }
+    
+    public override decimal CalcularValorProbatorio()
     {
         if (!EstaVerificada)
             return 0m;
@@ -54,7 +56,7 @@ public class PruebaDocumental : PruebaJudicial
             valorBase += 0.15m;
 
         // Penalización por antigüedad del registro
-        var diasDesdeRegistro = (DateTime.UtcNow - FechaRegistro).Days;
+        var diasDesdeRegistro = (DateTime.Now - FechaRegistro).Days;
         if (diasDesdeRegistro > 365)
             valorBase -= 0.10m;
 

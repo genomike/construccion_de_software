@@ -12,6 +12,6 @@ public class ParticipanteAudiencia
         Id = id;
         Nombre = nombre;
         Rol = rol;
-        FechaRegistro = DateTime.UtcNow;
+        FechaRegistro = DateTime.Now;
     }
 }

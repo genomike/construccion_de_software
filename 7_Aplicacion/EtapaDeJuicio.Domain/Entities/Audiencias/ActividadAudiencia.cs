@@ -14,7 +14,7 @@ public class ActividadAudiencia
         Id = Guid.NewGuid();
         Descripcion = descripcion;
         Tipo = tipo;
-        FechaHora = DateTime.UtcNow;
+        FechaHora = DateTime.Now;
         Observaciones = observaciones;
     }
 }

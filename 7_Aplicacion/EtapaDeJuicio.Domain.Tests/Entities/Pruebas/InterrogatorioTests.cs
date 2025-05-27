@@ -115,13 +115,14 @@ public class InterrogatorioTests
             TipoInterrogatorio.Directo);
         
         interrogatorio.AgregarPregunta("¿Qué observó?");
+        interrogatorio.ResponderPregunta(0, "respuesta");
         interrogatorio.MarcarComoCompleto();
 
         // Act & Assert
         var exception = Assert.Throws<DomainException>(() => 
             interrogatorio.AgregarPregunta("¿Cuándo fue?"));
         
-        exception.Message.Should().Contain("completo");
+        exception.Message.Should().Contain("No se pueden agregar preguntas");
     }
 
     [Fact]

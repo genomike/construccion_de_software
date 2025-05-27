@@ -29,7 +29,7 @@ public class Audiencia
 
     private readonly List<ParticipanteAudiencia> _participantes = new();
     private readonly List<ActividadAudiencia> _actividades = new();
-    
+
     public IReadOnlyCollection<ParticipanteAudiencia> Participantes => _participantes.AsReadOnly();
     public IReadOnlyCollection<ActividadAudiencia> Actividades => _actividades.AsReadOnly();
 
@@ -39,7 +39,8 @@ public class Audiencia
             throw new DomainException("El ID de la audiencia no puede estar vacío");
 
         if (string.IsNullOrWhiteSpace(titulo))
-            throw new DomainException("El título de la audiencia es obligatorio");        if (fechaHoraProgramada <= DateTime.UtcNow)
+            throw new DomainException("El título de la audiencia es obligatorio");
+        if (fechaHoraProgramada <= DateTime.Now)
             throw new DomainException("La audiencia debe tener una fecha futura");
 
         Id = id;
@@ -52,12 +53,14 @@ public class Audiencia
     public static Audiencia Crear(Guid id, string titulo, DateTime fechaHoraProgramada, TipoAudiencia tipo)
     {
         return new Audiencia(id, titulo, fechaHoraProgramada, tipo);
-    }    public void Iniciar()
-    {        if (Estado != EstadoAudiencia.Programada)
+    }
+    public void Iniciar()
+    {
+        if (Estado != EstadoAudiencia.Programada)
             throw new DomainException("Solo se pueden iniciar audiencias programadas");
 
         Estado = EstadoAudiencia.EnCurso;
-        FechaHoraInicio = DateTime.UtcNow;
+        FechaHoraInicio = DateTime.Now;
     }
 
     public void Finalizar()
@@ -66,7 +69,7 @@ public class Audiencia
             throw new DomainException("Solo se pueden finalizar audiencias en curso");
 
         Estado = EstadoAudiencia.Finalizada;
-        FechaHoraFin = DateTime.UtcNow;
+        FechaHoraFin = DateTime.Now;
     }
 
     public void Suspender(string motivo)
@@ -100,8 +103,11 @@ public class Audiencia
 
         Estado = EstadoAudiencia.Cancelada;
         MotivoCancelacion = motivo;
-    }    public void AgregarParticipante(Guid id, string nombre, RolParticipante rol)
-    {        if (_participantes.Any(p => p.Id == id))
+    }
+
+    public void AgregarParticipante(Guid id, string nombre, RolParticipante rol)
+    {
+        if (_participantes.Any(p => p.Id == id))
             throw new DomainException("Ya existe un participante con el mismo ID");
 
         if (string.IsNullOrWhiteSpace(nombre))
@@ -131,7 +137,7 @@ public class Audiencia
         // Para una audiencia válida necesita al menos un juez y participantes básicos
         var tieneJuez = _participantes.Any(p => p.Rol == RolParticipante.Juez);
         var tieneFiscal = _participantes.Any(p => p.Rol == RolParticipante.Fiscal);
-        
+
         return tieneJuez && tieneFiscal;
     }
 
@@ -141,7 +147,8 @@ public class Audiencia
             return null;
 
         return FechaHoraFin.Value - FechaHoraInicio.Value;
-    }    public string GenerarActa()
+    }
+    public string GenerarActa()
     {
         if (Estado != EstadoAudiencia.Finalizada)
             throw new DomainException("Solo se puede generar acta de audiencias finalizadas");

@@ -16,7 +16,7 @@ public class ActaAudiencia
         Id = Guid.NewGuid();
         AudienciaId = audienciaId;
         Contenido = contenido;
-        FechaGeneracion = DateTime.UtcNow;
+        FechaGeneracion = DateTime.Now;
         Participantes = participantes.ToList().AsReadOnly();
         Actividades = actividades.ToList().AsReadOnly();
     }

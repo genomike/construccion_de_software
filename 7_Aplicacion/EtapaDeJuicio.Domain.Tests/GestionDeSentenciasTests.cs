@@ -26,7 +26,7 @@ public class GestionDeSentenciasTests
         sentencia.JuezId.Should().Be(juezId);
         sentencia.Descripcion.Should().Be(descripcion);
         sentencia.Tipo.Should().Be(tipo);
-        sentencia.FechaEmision.Should().BeCloseTo(DateTime.UtcNow, TimeSpan.FromSeconds(1));
+        sentencia.FechaEmision.Should().BeCloseTo(DateTime.Now, TimeSpan.FromSeconds(1));
         sentencia.Resolutivos.Should().BeEmpty();
     }
 
@@ -256,7 +256,7 @@ public class GestionDeSentenciasTests
         var id = Guid.NewGuid();
         var sentenciaId = Guid.NewGuid();
         var contenido = "Notificación de sentencia emitida";
-        var fechaNotificacion = DateTime.UtcNow;
+        var fechaNotificacion = DateTime.Now;
 
         // Act
         var notificacion = Notificacion.Crear(id, sentenciaId, contenido, fechaNotificacion);
@@ -281,7 +281,7 @@ public class GestionDeSentenciasTests
         var parteProcesal = Guid.NewGuid();
         var tipoParte = TipoParteProcesalEnum.Demandado;
         var contenido = "Notificación de sentencia al demandado";
-        var fechaNotificacion = DateTime.UtcNow;
+        var fechaNotificacion = DateTime.Now;
 
         // Act
         var notificacion = Notificacion.Crear(id, sentenciaId, parteProcesal, tipoParte, contenido, fechaNotificacion);
@@ -303,7 +303,7 @@ public class GestionDeSentenciasTests
         // Arrange
         var sentenciaId = Guid.NewGuid();
         var contenido = "Notificación test";
-        var fechaNotificacion = DateTime.UtcNow;
+        var fechaNotificacion = DateTime.Now;
 
         // Act & Assert
         var act = () => Notificacion.Crear(Guid.Empty, sentenciaId, contenido, fechaNotificacion);
@@ -317,7 +317,7 @@ public class GestionDeSentenciasTests
         // Arrange
         var id = Guid.NewGuid();
         var contenido = "Notificación test";
-        var fechaNotificacion = DateTime.UtcNow;
+        var fechaNotificacion = DateTime.Now;
 
         // Act & Assert
         var act = () => Notificacion.Crear(id, Guid.Empty, contenido, fechaNotificacion);
@@ -334,7 +334,7 @@ public class GestionDeSentenciasTests
         // Arrange
         var id = Guid.NewGuid();
         var sentenciaId = Guid.NewGuid();
-        var fechaNotificacion = DateTime.UtcNow;
+        var fechaNotificacion = DateTime.Now;
 
         // Act & Assert
         var act = () => Notificacion.Crear(id, sentenciaId, contenido, fechaNotificacion);
@@ -350,7 +350,7 @@ public class GestionDeSentenciasTests
         var sentenciaId = Guid.NewGuid();
         var tipoParte = TipoParteProcesalEnum.Demandado;
         var contenido = "Notificación test";
-        var fechaNotificacion = DateTime.UtcNow;
+        var fechaNotificacion = DateTime.Now;
 
         // Act & Assert
         var act = () => Notificacion.Crear(id, sentenciaId, Guid.Empty, tipoParte, contenido, fechaNotificacion);
@@ -370,7 +370,7 @@ public class GestionDeSentenciasTests
         var sentenciaId = Guid.NewGuid();
         var parteProcesal = Guid.NewGuid();
         var contenido = $"Notificación para {tipoParte}";
-        var fechaNotificacion = DateTime.UtcNow;
+        var fechaNotificacion = DateTime.Now;
 
         // Act
         var notificacion = Notificacion.Crear(id, sentenciaId, parteProcesal, tipoParte, contenido, fechaNotificacion);
@@ -424,7 +424,7 @@ public class GestionDeSentenciasTests
         sentencia.AgregarResolutivo("SE DECLARA FUNDADA la demanda");
         sentencia.AgregarResolutivo("CONDÉNASE al demandado al pago de daños");
 
-        var fechaNotificacion = DateTime.UtcNow.AddDays(1);
+        var fechaNotificacion = DateTime.Now.AddDays(1);
 
         // Act - Crear notificaciones para diferentes partes
         var notificacionDemandante = Notificacion.Crear(
@@ -510,7 +510,7 @@ public class GestionDeSentenciasTests
             Guid.NewGuid(),
             Guid.NewGuid(),
             "Notificación de prueba",
-            DateTime.UtcNow);
+            DateTime.Now);
     }
 
     #endregion

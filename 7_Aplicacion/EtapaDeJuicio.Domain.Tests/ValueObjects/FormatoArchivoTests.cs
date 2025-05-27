@@ -46,7 +46,7 @@ public class FormatoArchivoTests
     {
         // Act & Assert
         var exception = Assert.Throws<DomainException>(() => FormatoArchivo.Crear(nombreArchivo));
-        exception.Message.Should().Contain("formato no permitido");
+        exception.Message.Should().Contain("formato no está permitido");
     }
 
     [Theory]
@@ -82,7 +82,7 @@ public class FormatoArchivoTests
 
         // Assert
         formato.Should().NotBeNull();
-        formato.Extension.Should().Be(Path.GetExtension(nombreArchivo).TrimStart('.').ToLower());
+        formato.Extension.Should().Be(Path.GetExtension(nombreArchivo).ToLower());
     }
 
     [Fact]

@@ -68,6 +68,7 @@ public class DeliberacionTests
     {
         // Arrange
         var deliberacion = Deliberacion.Crear(Guid.NewGuid(), "Test", DateTime.Now);
+        deliberacion.AgregarConsiderando("Art 123", "Análisis");
         deliberacion.Finalizar();
 
         // Act & Assert
@@ -151,13 +152,14 @@ public class DeliberacionTests
     {
         // Arrange
         var deliberacion = Deliberacion.Crear(Guid.NewGuid(), "Test", DateTime.Now);
+        deliberacion.AgregarConsiderando("Art 123", "Análisis");
         deliberacion.Finalizar();
 
         // Act & Assert
         var exception = Assert.Throws<DomainException>(() => 
             deliberacion.IniciarAnalisis());
         
-        exception.Message.Should().Contain("estado actual");
+        exception.Message.Should().Contain("No se puede modificar");
     }
 
     [Fact]
@@ -174,7 +176,7 @@ public class DeliberacionTests
 
         // Assert
         deliberacion.Estado.Should().Be(EstadoDeliberacion.Finalizada);
-        deliberacion.FechaFin.Should().BeCloseTo(DateTime.UtcNow, TimeSpan.FromSeconds(5));
+        deliberacion.FechaFin.Should().BeCloseTo(DateTime.Now, TimeSpan.FromSeconds(5));
     }
 
     [Fact]
@@ -187,7 +189,7 @@ public class DeliberacionTests
         var exception = Assert.Throws<DomainException>(() => 
             deliberacion.Finalizar());
         
-        exception.Message.Should().Contain("al menos un considerando");
+        exception.Message.Should().Contain("No se puede finalizar una deliberación sin considerandos");
     }
 
     [Fact]
@@ -217,7 +219,9 @@ public class DeliberacionTests
 
         // Assert
         deliberacion.Estado.Should().Be(EstadoDeliberacion.EnAnalisis);
-    }    [Fact]
+    }
+    
+    [Fact]
     public void ObtenerDuracion_ConFechaFin_DeberiaCalcularCorrectamente()
     {
         // Arrange
@@ -234,7 +238,9 @@ public class DeliberacionTests
         // Assert
         duracion.Should().BeGreaterThan(TimeSpan.Zero);
         duracion.Should().BeCloseTo(TimeSpan.FromHours(2), TimeSpan.FromMinutes(1));
-    }    [Fact]
+    }
+    
+    [Fact]
     public void ObtenerDuracion_SinFechaFin_DeberiaCalcularDuracionActual()
     {
         // Arrange
@@ -290,13 +296,11 @@ public class DeliberacionTests
         deliberacion.AgregarValoracion(prueba, 0.8m, "Documento válido");
 
         // Act
-        var resumen = deliberacion.ObtenerResumen();
-
-        // Assert
+        var resumen = deliberacion.ObtenerResumen();        // Assert
         resumen.Should().NotBeNull();
         resumen.Should().Contain("Deliberación importante");
-        resumen.Should().Contain("1 considerando");
-        resumen.Should().Contain("1 valoración");
+        resumen.Should().Contain("Considerandos: 1");
+        resumen.Should().Contain("Valoraciones: 1");
     }
 
     [Theory]

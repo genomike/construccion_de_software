@@ -66,7 +66,7 @@ public class Sentencia
         JuezId = juezId;
         Descripcion = descripcion;
         Tipo = tipo;
-        FechaEmision = DateTime.UtcNow;
+        FechaEmision = DateTime.Now;
     }
 
     public static Sentencia Crear(Guid id, Guid juezId, string descripcion, TipoSentencia tipo)

@@ -31,7 +31,7 @@ public class EmisionDeSentenciaTests
         sentencia.Descripcion.Should().Be(descripcion);
         sentencia.Tipo.Should().Be(TipoSentencia.Condenatoria);
         sentencia.Resolutivos.Should().HaveCount(1);
-        sentencia.FechaEmision.Should().BeCloseTo(DateTime.UtcNow, TimeSpan.FromMinutes(1));
+        sentencia.FechaEmision.Should().BeCloseTo(DateTime.Now, TimeSpan.FromMinutes(1));
     }
 
     [Fact]

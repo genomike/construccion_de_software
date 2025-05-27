@@ -41,7 +41,9 @@ public class Deliberacion
         FechaInicio = fechaInicio;
         EstaFinalizada = false;
         Estado = EstadoDeliberacion.Iniciada;
-    }    // Constructor para compatibilidad con DeliberacionJudicialTests
+    }
+    
+    // Constructor para compatibilidad con DeliberacionJudicialTests
     private Deliberacion(Guid id, string casoNumero) 
     {
         if (id == Guid.Empty)
@@ -52,7 +54,7 @@ public class Deliberacion
 
         Id = id;
         Descripcion = casoNumero;
-        FechaInicio = DateTime.UtcNow;
+        FechaInicio = DateTime.Now;
         EstaFinalizada = false;
         Estado = EstadoDeliberacion.Iniciada;
     }
@@ -65,7 +67,9 @@ public class Deliberacion
     public static Deliberacion Crear(Guid id, string casoNumero)
     {
         return new Deliberacion(id, casoNumero);
-    }    public void GenerarConsiderandos()
+    }
+    
+    public void GenerarConsiderandos()
     {
         if (_valoraciones.Count == 0)
             throw new DomainException("No se puede generar considerandos sin pruebas valoradas");
@@ -123,7 +127,7 @@ public class Deliberacion
 
     public TimeSpan ObtenerDuracion()
     {
-        var fechaFin = FechaFin ?? DateTime.UtcNow;
+        var fechaFin = FechaFin ?? DateTime.Now;
         return fechaFin - FechaInicio;
     }
 
@@ -136,11 +140,9 @@ public class Deliberacion
         var valoracionesCount = _valoraciones.Count;
         var valorPromedio = CalcularValorTotalPruebas();
         
-        var valoracionesTexto = valoracionesCount == 1 ? "1 valoración" : $"{valoracionesCount} valoraciones";
-        
         return $"Deliberación: {Descripcion}. " +
                $"Considerandos: {considerandosCount}. " +
-               $"{valoracionesTexto}. " +
+               $"Valoraciones: {valoracionesCount}. " +
                $"Valor promedio: {valorPromedio.ToString("F2", System.Globalization.CultureInfo.InvariantCulture)}. " +
                $"Estado: {Estado}";
     }
@@ -148,13 +150,15 @@ public class Deliberacion
     public bool PuedeModificar()
     {
         return Estado != EstadoDeliberacion.Finalizada;
-    }    public void Finalizar()
+    }
+    
+    public void Finalizar()
     {
         if (_considerandos.Count == 0)
             throw new DomainException("No se puede finalizar una deliberación sin considerandos");
 
         EstaFinalizada = true;
-        FechaFin = DateTime.UtcNow;
+        FechaFin = DateTime.Now;
         Estado = EstadoDeliberacion.Finalizada;
     }
 

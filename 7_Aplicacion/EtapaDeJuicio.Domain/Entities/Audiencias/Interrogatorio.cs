@@ -52,6 +52,9 @@ public class Interrogatorio
 
     public void AgregarPregunta(string textoPregunta)
     {
+        if (string.IsNullOrWhiteSpace(textoPregunta))
+            throw new DomainException("El texto de la pregunta no puede estar vacío");
+
         if (EstaFinalizado)
             throw new DomainException("No se pueden agregar preguntas a un interrogatorio finalizado");
             

@@ -74,7 +74,7 @@ public class GestionDeAudienciasTests
         // Act & Assert
         var act = () => Audiencia.Crear(id, titulo, fechaPasada, tipo);
         act.Should().Throw<DomainException>()
-           .WithMessage("*fecha*audiencia*futura*");
+           .WithMessage("La audiencia debe tener una fecha futura");
     }
 
     [Theory]
@@ -113,7 +113,7 @@ public class GestionDeAudienciasTests
 
         // Assert
         audiencia.Estado.Should().Be(EstadoAudiencia.EnCurso);
-        audiencia.FechaInicio.Should().BeCloseTo(DateTime.UtcNow, TimeSpan.FromSeconds(5));
+        audiencia.FechaInicio.Should().BeCloseTo(DateTime.Now, TimeSpan.FromSeconds(5));
     }
 
     [Fact]
@@ -141,7 +141,7 @@ public class GestionDeAudienciasTests
 
         // Assert
         audiencia.Estado.Should().Be(EstadoAudiencia.Finalizada);
-        audiencia.FechaFin.Should().BeCloseTo(DateTime.UtcNow, TimeSpan.FromSeconds(5));
+        audiencia.FechaFin.Should().BeCloseTo(DateTime.Now, TimeSpan.FromSeconds(5));
     }
 
     [Fact]
@@ -267,7 +267,7 @@ public class GestionDeAudienciasTests
         participante.Id.Should().Be(participanteId);
         participante.Nombre.Should().Be(nombre);
         participante.Rol.Should().Be(rol);
-        participante.FechaRegistro.Should().BeCloseTo(DateTime.UtcNow, TimeSpan.FromSeconds(5));
+        participante.FechaRegistro.Should().BeCloseTo(DateTime.Now, TimeSpan.FromSeconds(5));
     }
 
     [Fact]
@@ -350,7 +350,7 @@ public class GestionDeAudienciasTests
         var actividad = audiencia.Actividades.First();
         actividad.Descripcion.Should().Be(descripcion);
         actividad.Tipo.Should().Be(tipo);
-        actividad.Timestamp.Should().BeCloseTo(DateTime.UtcNow, TimeSpan.FromSeconds(5));
+        actividad.Timestamp.Should().BeCloseTo(DateTime.Now, TimeSpan.FromSeconds(5));
     }
 
     [Fact]

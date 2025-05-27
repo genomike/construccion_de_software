@@ -68,6 +68,7 @@ public class Interrogatorio
             throw new DomainException("El interrogatorio debe tener al menos una pregunta para ser completado");
 
         var preguntasSinResponder = ObtenerPreguntasSinResponder();
+
         if (preguntasSinResponder.Any())
             throw new DomainException("No se puede marcar como completo un interrogatorio con preguntas sin responder");
 
