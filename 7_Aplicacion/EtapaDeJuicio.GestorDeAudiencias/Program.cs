@@ -1,11 +1,23 @@
+using EtapaDeJuicio.Infraestructure;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-
 builder.Services.AddControllers();
+
+// Configurar MediatR
+builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblies(
+    typeof(EtapaDeJuicio.Application.Commands.Audiencias.CrearAudienciaCommand).Assembly));
+
+// Configurar Infrastructure
+builder.Services.AddInfraestructure(builder.Configuration);
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(c =>
+{
+    c.SwaggerDoc("v1", new() { Title = "Gestor de Audiencias API", Version = "v1" });
+});
 
 var app = builder.Build();
 
@@ -23,3 +35,6 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
+
+// Hacer la clase Program pública para las pruebas de integración
+public partial class Program { }

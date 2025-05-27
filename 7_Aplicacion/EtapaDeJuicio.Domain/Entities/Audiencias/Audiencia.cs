@@ -14,7 +14,7 @@ public enum EstadoAudiencia
 public class Audiencia
 {
     public Guid Id { get; private set; }
-    public string Titulo { get; private set; }
+    public string Titulo { get; private set; } = string.Empty;
     public DateTime FechaHoraProgramada { get; private set; }
     public DateTime FechaProgramada => FechaHoraProgramada; // Alias para compatibilidad
     public TipoAudiencia Tipo { get; private set; }
@@ -32,6 +32,9 @@ public class Audiencia
 
     public IReadOnlyCollection<ParticipanteAudiencia> Participantes => _participantes.AsReadOnly();
     public IReadOnlyCollection<ActividadAudiencia> Actividades => _actividades.AsReadOnly();
+
+    // Constructor sin parámetros para Entity Framework
+    private Audiencia() { }
 
     private Audiencia(Guid id, string titulo, DateTime fechaHoraProgramada, TipoAudiencia tipo)
     {
@@ -103,9 +106,7 @@ public class Audiencia
 
         Estado = EstadoAudiencia.Cancelada;
         MotivoCancelacion = motivo;
-    }
-
-    public void AgregarParticipante(Guid id, string nombre, RolParticipante rol)
+    }    public void AgregarParticipante(Guid id, string nombre, RolParticipante rol)
     {
         if (_participantes.Any(p => p.Id == id))
             throw new DomainException("Ya existe un participante con el mismo ID");
@@ -113,10 +114,10 @@ public class Audiencia
         if (string.IsNullOrWhiteSpace(nombre))
             throw new DomainException("El nombre del participante es obligatorio");
 
-        _participantes.Add(new ParticipanteAudiencia(id, nombre, rol));
-    }
-
-    public void RegistrarActividad(string descripcion, TipoActividad tipo, string? observaciones = null)
+        var participante = new ParticipanteAudiencia(id, nombre, rol);
+        participante.SetAudienciaId(this.Id);
+        _participantes.Add(participante);
+    }    public Guid RegistrarActividad(string descripcion, TipoActividad tipo, string? observaciones = null)
     {
         if (Estado != EstadoAudiencia.EnCurso)
             throw new DomainException("Solo se pueden registrar actividades en audiencias en curso");
@@ -124,7 +125,10 @@ public class Audiencia
         if (string.IsNullOrWhiteSpace(descripcion))
             throw new DomainException("La descripción de la actividad es obligatoria");
 
-        _actividades.Add(new ActividadAudiencia(descripcion, tipo, observaciones));
+        var actividad = new ActividadAudiencia(descripcion, tipo, observaciones);
+        actividad.SetAudienciaId(this.Id);
+        _actividades.Add(actividad);
+        return actividad.Id;
     }
 
     public IEnumerable<ParticipanteAudiencia> ObtenerParticipantesPorRol(RolParticipante rol)

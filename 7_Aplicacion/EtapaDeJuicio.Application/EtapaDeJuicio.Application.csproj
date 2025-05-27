@@ -6,13 +6,20 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
   </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="MediatR" Version="12.2.0" />
+    <PackageReference Include="FluentValidation" Version="11.9.0" />
+    <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="11.9.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\EtapaDeJuicio.Domain\EtapaDeJuicio.Domain.csproj" />
+  </ItemGroup>
 
   <ItemGroup>
     <Folder Include="Commands\Sentencias\" />
     <Folder Include="Commands\Pruebas\" />
-    <Folder Include="Commands\Audiencias\" />
     <Folder Include="Handlers\EventHandlers\" />
-    <Folder Include="Handlers\CommandHandlers\" />
     <Folder Include="Sagas\DeliberacionSaga\" />
     <Folder Include="Sagas\InterrogatorioSaga\" />
     <Folder Include="Sagas\PresentacionPruebasSaga\" />

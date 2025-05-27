@@ -1,19 +1,27 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <OutputType>Exe</OutputType>
     <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
   </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.10" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="8.0.10" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.10" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.10" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="8.0.2" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="8.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\EtapaDeJuicio.Domain\EtapaDeJuicio.Domain.csproj" />
+    <ProjectReference Include="..\EtapaDeJuicio.Application\EtapaDeJuicio.Application.csproj" />
+  </ItemGroup>
 
   <ItemGroup>
     <Folder Include="EventBus\InMemory\" />
     <Folder Include="EventBus\RabbitMQ\" />
-    <Folder Include="Persistence\Configurations\" />
-    <Folder Include="Persistence\Context\" />
-    <Folder Include="Persistence\UnitOfWork\" />
-    <Folder Include="Persistence\Repositories\" />
     <Folder Include="Services\" />
     <Folder Include="Logging\" />
   </ItemGroup>
