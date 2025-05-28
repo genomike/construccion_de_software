@@ -13,16 +13,15 @@ public static class DependencyInjection
     public static IServiceCollection AddInfraestructure(
         this IServiceCollection services, 
         IConfiguration configuration)
-    {
-        // Configurar Entity Framework
+    {        // Configurar Entity Framework
         services.AddDbContext<EtapaDeJuicioDbContext>(options =>
         {
             var connectionString = configuration.GetConnectionString("DefaultConnection");
             
             if (string.IsNullOrEmpty(connectionString))
             {
-                // Configuración por defecto para desarrollo con LocalDB
-                connectionString = "Server=(localdb)\\MSSQLLocalDB;Database=EtapaDeJuicioDB;Trusted_Connection=true;MultipleActiveResultSets=true;TrustServerCertificate=true";
+                // Configuración por defecto para desarrollo con SQL Server
+                connectionString = "Server=localhost;Database=EtapaDeJuicioDB;User Id=sa;Password=123456;TrustServerCertificate=true;MultipleActiveResultSets=true";
             }
             
             options.UseSqlServer(connectionString, sqlOptions =>

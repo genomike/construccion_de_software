@@ -4,13 +4,12 @@ using Microsoft.EntityFrameworkCore.Design;
 namespace EtapaDeJuicio.Infraestructure.Persistence.Context;
 
 public class DesignTimeDbContextFactory : IDesignTimeDbContextFactory<EtapaDeJuicioDbContext>
-{
-    public EtapaDeJuicioDbContext CreateDbContext(string[] args)
+{    public EtapaDeJuicioDbContext CreateDbContext(string[] args)
     {
         var optionsBuilder = new DbContextOptionsBuilder<EtapaDeJuicioDbContext>();
         
-        // Usar la misma cadena de conexión por defecto que está en DependencyInjection.cs
-        var connectionString = "Server=(localdb)\\MSSQLLocalDB;Database=EtapaDeJuicioDB;Trusted_Connection=true;MultipleActiveResultSets=true;TrustServerCertificate=true";
+        // Usar la nueva cadena de conexión de SQL Server
+        var connectionString = "Server=localhost;Database=EtapaDeJuicioDB;User Id=sa;Password=123456;TrustServerCertificate=true;MultipleActiveResultSets=true";
         
         optionsBuilder.UseSqlServer(connectionString, options =>
         {
