@@ -8,10 +8,10 @@
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.6.2" />
     <PackageReference Include="MediatR" Version="12.2.0" />
   </ItemGroup>
-
   <ItemGroup>
     <ProjectReference Include="..\EtapaDeJuicio.Application\EtapaDeJuicio.Application.csproj" />
     <ProjectReference Include="..\EtapaDeJuicio.Domain\EtapaDeJuicio.Domain.csproj" />
+    <ProjectReference Include="..\EtapaDeJuicio.Infraestructure\EtapaDeJuicio.Infraestructure.csproj" />
   </ItemGroup>
 
   <ItemGroup>

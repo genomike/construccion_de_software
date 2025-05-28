@@ -24,9 +24,7 @@ public class AudienciaConfiguration : IEntityTypeConfiguration<Audiencia>
 
         builder.Property(a => a.Tipo)
             .IsRequired()
-            .HasConversion<string>();
-
-        builder.Property(a => a.Estado)
+            .HasConversion<string>();        builder.Property(a => a.Estado)
             .IsRequired()
             .HasConversion<string>();
 
@@ -46,7 +44,7 @@ public class AudienciaConfiguration : IEntityTypeConfiguration<Audiencia>
 
         builder.Property(a => a.MotivoSuspension)
             .HasMaxLength(500)
-            .IsRequired(false);        // Relación con participantes usando backing field
+            .IsRequired(false);// Relación con participantes usando backing field
         builder.HasMany(a => a.Participantes)
             .WithOne()
             .HasForeignKey("AudienciaId")

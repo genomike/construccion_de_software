@@ -7,7 +7,9 @@ namespace EtapaDeJuicio.Infraestructure.Persistence.Repositories;
 
 public class AudienciaRepository : IAudienciaRepository
 {
-    private readonly EtapaDeJuicioDbContext _context;    public AudienciaRepository(EtapaDeJuicioDbContext context)
+    private readonly EtapaDeJuicioDbContext _context;
+
+    public AudienciaRepository(EtapaDeJuicioDbContext context)
     {
         _context = context ?? throw new ArgumentNullException(nameof(context));
     }
@@ -81,23 +83,22 @@ public class AudienciaRepository : IAudienciaRepository
         }
 
         return await query.CountAsync(cancellationToken);
-    }
-
-    public async Task<Guid> CrearAsync(Audiencia audiencia, CancellationToken cancellationToken = default)
+    }    public async Task<Guid> CrearAsync(Audiencia audiencia, CancellationToken cancellationToken = default)
     {
         if (audiencia == null)
             throw new ArgumentNullException(nameof(audiencia));
-
+            
         await _context.Audiencias.AddAsync(audiencia, cancellationToken);
         return audiencia.Id;
-    }
-
-    public Task ActualizarAsync(Audiencia audiencia, CancellationToken cancellationToken = default)
+    }    public Task ActualizarAsync(Audiencia audiencia, CancellationToken cancellationToken = default)
     {
         if (audiencia == null)
             throw new ArgumentNullException(nameof(audiencia));
 
+        // Para EF InMemory, simplemente usar Update
+        // Este enfoque funciona porque EF InMemory puede acceder a los backing fields
         _context.Audiencias.Update(audiencia);
+        
         return Task.CompletedTask;
     }
 

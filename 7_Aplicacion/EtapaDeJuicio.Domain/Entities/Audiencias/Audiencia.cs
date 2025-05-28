@@ -1,5 +1,4 @@
 using EtapaDeJuicio.Domain.Exceptions;
-
 namespace EtapaDeJuicio.Domain.Entities.Audiencias;
 
 public enum EstadoAudiencia
@@ -18,14 +17,13 @@ public class Audiencia
     public DateTime FechaHoraProgramada { get; private set; }
     public DateTime FechaProgramada => FechaHoraProgramada; // Alias para compatibilidad
     public TipoAudiencia Tipo { get; private set; }
-    public int DuracionMinutos { get; private set; }
-    public EstadoAudiencia Estado { get; private set; }
-    public DateTime? FechaHoraInicio { get; private set; }
+    public int DuracionMinutos { get; private set; }    public EstadoAudiencia Estado { get; internal set; }
+    public DateTime? FechaHoraInicio { get; internal set; }
     public DateTime? FechaInicio => FechaHoraInicio; // Alias para compatibilidad
-    public DateTime? FechaHoraFin { get; private set; }
+    public DateTime? FechaHoraFin { get; internal set; }
     public DateTime? FechaFin => FechaHoraFin; // Alias para compatibilidad
-    public string? MotivoCancelacion { get; private set; }
-    public string? MotivoSuspension { get; private set; }
+    public string? MotivoCancelacion { get; internal set; }
+    public string? MotivoSuspension { get; internal set; }
 
     private readonly List<ParticipanteAudiencia> _participantes = new();
     private readonly List<ActividadAudiencia> _actividades = new();
@@ -165,9 +163,7 @@ public class Audiencia
                        $"Actividades: {string.Join(", ", _actividades.Select(a => a.Descripcion))}";
 
         return contenido;
-    }
-
-    public bool PuedeModificar()
+    }    public bool PuedeModificar()
     {
         return Estado == EstadoAudiencia.Programada;
     }
