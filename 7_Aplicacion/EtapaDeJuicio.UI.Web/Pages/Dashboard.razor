@@ -1,0 +1,323 @@
+@page "/dashboard"
+@inject AudienciaService AudienciaService
+@inject InterrogatorioService InterrogatorioService
+@inject PruebaDocumentalService PruebaDocumentalService
+@inject PruebaTestimonialService PruebaTestimonialService
+@inject SentenciaService SentenciaService
+@using EtapaDeJuicio.Domain.Entities
+@using EtapaDeJuicio.Domain.Entities.Audiencias
+@using EtapaDeJuicio.Domain.Entities.Sentencias
+@using EtapaDeJuicio.UI.Web.Services
+@using EtapaDeJuicio.UI.Web.Models
+
+<PageTitle>Dashboard - Sistema de Etapa de Juicio</PageTitle>
+
+<div class="container-fluid">
+    <div class="row mb-4">
+        <div class="col-12">
+            <h1 class="h2 mb-3">📊 Dashboard del Sistema</h1>
+            <p class="text-muted">Vista general del estado actual del sistema de gestión judicial</p>
+        </div>
+    </div>
+
+    @if (isLoading)
+    {
+        <div class="text-center">
+            <div class="spinner-border text-primary" role="status">
+                <span class="visually-hidden">Cargando...</span>
+            </div>
+            <p class="mt-2">Cargando estadísticas...</p>
+        </div>
+    }
+    else
+    {
+        <!-- Estadísticas principales -->
+        <div class="row mb-4">
+            <div class="col-lg-3 col-md-6 mb-3">
+                <div class="card border-primary h-100">
+                    <div class="card-body text-center">
+                        <div class="h1 text-primary mb-2">🏛️</div>
+                        <h3 class="text-primary">@totalAudiencias</h3>
+                        <p class="card-text text-muted">Audiencias Registradas</p>
+                        <small class="text-success">
+                            @audienciasActivas activas
+                        </small>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-3 col-md-6 mb-3">
+                <div class="card border-info h-100">
+                    <div class="card-body text-center">
+                        <div class="h1 text-info mb-2">❓</div>
+                        <h3 class="text-info">@totalInterrogatorios</h3>
+                        <p class="card-text text-muted">Interrogatorios</p>
+                        <small class="text-info">
+                            Total registrados
+                        </small>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-3 col-md-6 mb-3">
+                <div class="card border-warning h-100">
+                    <div class="card-body text-center">
+                        <div class="h1 text-warning mb-2">📋</div>
+                        <h3 class="text-warning">@totalPruebas</h3>
+                        <p class="card-text text-muted">Pruebas</p>
+                        <small class="text-muted">
+                            @totalPruebasDocumentales doc. / @totalPruebasTestimoniales test.
+                        </small>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-3 col-md-6 mb-3">
+                <div class="card border-success h-100">
+                    <div class="card-body text-center">
+                        <div class="h1 text-success mb-2">⚖️</div>
+                        <h3 class="text-success">@totalSentencias</h3>
+                        <p class="card-text text-muted">Sentencias</p>
+                        <small class="text-success">
+                            @sentenciasFinales finalizadas
+                        </small>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Actividad reciente -->
+        <div class="row">
+            <div class="col-lg-6 mb-4">
+                <div class="card h-100">
+                    <div class="card-header">
+                        <h5 class="mb-0">🕒 Audiencias Recientes</h5>
+                    </div>
+                    <div class="card-body">
+                        @if (audienciasRecientes?.Any() == true)
+                        {
+                            <div class="list-group list-group-flush">
+                                @foreach (var audiencia in audienciasRecientes.Take(5))
+                                {
+                                    <div class="list-group-item d-flex justify-content-between align-items-start">
+                                        <div class="ms-2 me-auto">
+                                            <div class="fw-bold">Audiencia #@audiencia.Id</div>
+                                            <small class="text-muted">@(audiencia.FechaInicio?.ToString("dd/MM/yyyy HH:mm") ?? "Sin fecha")</small>
+                                        </div>                                        <span class="badge bg-@(GetEstadoBadgeClass(audiencia.Estado.ToString())) rounded-pill">
+                                            @audiencia.Estado
+                                        </span>
+                                    </div>
+                                }
+                            </div>
+                        }
+                        else
+                        {
+                            <p class="text-muted text-center">No hay audiencias registradas</p>
+                        }
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-6 mb-4">
+                <div class="card h-100">
+                    <div class="card-header">
+                        <h5 class="mb-0">📊 Estado de Sentencias</h5>
+                    </div>
+                    <div class="card-body">
+                        @if (sentenciasRecientes?.Any() == true)
+                        {
+                            <div class="list-group list-group-flush">
+                                @foreach (var sentencia in sentenciasRecientes.Take(5))
+                                {
+                                    <div class="list-group-item d-flex justify-content-between align-items-start">
+                                        <div class="ms-2 me-auto">
+                                            <div class="fw-bold">Sentencia #@sentencia.Id</div>
+                                            <small class="text-muted">@sentencia.FechaEmision.ToString("dd/MM/yyyy")</small>
+                                        </div>                                        <span class="badge bg-@(GetTipoSentenciaBadgeClass(sentencia.Tipo.ToString())) rounded-pill">
+                                            @sentencia.Tipo
+                                        </span>
+                                    </div>
+                                }
+                            </div>
+                        }
+                        else
+                        {
+                            <p class="text-muted text-center">No hay sentencias registradas</p>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Acciones rápidas -->
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="mb-0">⚡ Acciones Rápidas</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row g-3">
+                            <div class="col-md-3">
+                                <a href="/audiencias" class="btn btn-outline-primary w-100">
+                                    <i class="bi bi-plus-circle"></i> Nueva Audiencia
+                                </a>
+                            </div>
+                            <div class="col-md-3">
+                                <a href="/interrogatorios" class="btn btn-outline-info w-100">
+                                    <i class="bi bi-question-circle"></i> Nuevo Interrogatorio
+                                </a>
+                            </div>
+                            <div class="col-md-3">
+                                <a href="/pruebas" class="btn btn-outline-warning w-100">
+                                    <i class="bi bi-file-text"></i> Gestionar Pruebas
+                                </a>
+                            </div>
+                            <div class="col-md-3">
+                                <a href="/sentencias" class="btn btn-outline-success w-100">
+                                    <i class="bi bi-gavel"></i> Ver Sentencias
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+@code {
+    private bool isLoading = true;
+    
+    // Estadísticas
+    private int totalAudiencias = 0;
+    private int audienciasActivas = 0;
+    private int totalInterrogatorios = 0;
+    private int totalPruebas = 0;
+    private int totalPruebasDocumentales = 0;
+    private int totalPruebasTestimoniales = 0;
+    private int totalSentencias = 0;
+    private int sentenciasFinales = 0;
+
+    // Datos recientes
+    private List<Audiencia>? audienciasRecientes;
+    private List<Sentencia>? sentenciasRecientes;
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            await LoadDashboardData();
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error loading dashboard data: {ex.Message}");
+        }
+        finally
+        {
+            isLoading = false;
+        }
+    }
+
+    private async Task LoadDashboardData()
+    {
+        // Cargar audiencias
+        try
+        {
+            var audiencias = await AudienciaService.GetAllAsync();
+            if (audiencias != null)
+            {
+                totalAudiencias = audiencias.Count();                audienciasActivas = audiencias.Count(a => a.Estado == EstadoAudiencia.EnCurso || 
+                                                          a.Estado == EstadoAudiencia.Programada);
+                audienciasRecientes = audiencias.OrderByDescending(a => a.FechaInicio).ToList();
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error loading audiencias: {ex.Message}");
+        }
+
+        // Cargar interrogatorios
+        try
+        {
+            var interrogatorios = await InterrogatorioService.GetAllAsync();
+            if (interrogatorios != null)
+            {
+                totalInterrogatorios = interrogatorios.Count();
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error loading interrogatorios: {ex.Message}");
+        }
+
+        // Cargar pruebas documentales
+        try
+        {
+            var pruebasDoc = await PruebaDocumentalService.GetAllAsync();
+            if (pruebasDoc != null)
+            {
+                totalPruebasDocumentales = pruebasDoc.Count();
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error loading pruebas documentales: {ex.Message}");
+        }
+
+        // Cargar pruebas testimoniales
+        try
+        {
+            var pruebasTest = await PruebaTestimonialService.GetAllAsync();
+            if (pruebasTest != null)
+            {
+                totalPruebasTestimoniales = pruebasTest.Count();
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error loading pruebas testimoniales: {ex.Message}");
+        }
+
+        totalPruebas = totalPruebasDocumentales + totalPruebasTestimoniales;
+
+        // Cargar sentencias
+        try
+        {
+            var sentencias = await SentenciaService.GetAllAsync();
+            if (sentencias != null)
+            {
+                totalSentencias = sentencias.Count();                sentenciasFinales = sentencias.Count(s => s.Tipo == TipoSentencia.Definitiva);
+                sentenciasRecientes = sentencias.OrderByDescending(s => s.FechaEmision).ToList();
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error loading sentencias: {ex.Message}");
+        }
+    }
+
+    private string GetEstadoBadgeClass(string estado)
+    {
+        return estado?.ToLower() switch
+        {
+            "activa" or "en curso" => "success",
+            "finalizada" or "completada" => "primary",
+            "suspendida" => "warning",
+            "cancelada" => "danger",
+            _ => "secondary"
+        };
+    }
+
+    private string GetTipoSentenciaBadgeClass(string tipoSentencia)
+    {
+        return tipoSentencia?.ToLower() switch
+        {
+            "definitiva" or "final" => "success",
+            "provisional" or "temporal" => "warning",
+            "absolutoria" => "info",
+            "condenatoria" => "primary",
+            _ => "secondary"
+        };
+    }
+}

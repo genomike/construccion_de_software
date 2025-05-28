@@ -1,0 +1,286 @@
+@page "/audiencias"
+@using EtapaDeJuicio.UI.Web.Models
+@using EtapaDeJuicio.UI.Web.Services
+@using EtapaDeJuicio.Domain.Entities.Audiencias
+@inject AudienciaService AudienciaService
+@inject NotificationService NotificationService
+@inject IJSRuntime JSRuntime
+
+<PageTitle>Gestión de Audiencias</PageTitle>
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h1>🎯 Gestión de Audiencias</h1>
+                <button class="btn btn-primary" @onclick="ShowCreateModal">
+                    <span class="oi oi-plus" aria-hidden="true"></span> Nueva Audiencia
+                </button>
+            </div>
+        </div>
+    </div>
+
+    @if (loading)
+    {
+        <div class="text-center">
+            <div class="spinner-border" role="status">
+                <span class="visually-hidden">Cargando...</span>
+            </div>
+            <p>Cargando audiencias...</p>
+        </div>
+    }
+    else if (audiencias == null || !audiencias.Any())
+    {
+        <div class="alert alert-info" role="alert">
+            <h4 class="alert-heading">No hay audiencias registradas</h4>
+            <p>No se encontraron audiencias en el sistema. ¡Crea la primera audiencia!</p>
+        </div>
+    }
+    else
+    {
+        <div class="row">
+            @foreach (var audiencia in audiencias)
+            {
+                <div class="col-md-6 col-lg-4 mb-4">
+                    <div class="card h-100">
+                        <div class="card-header bg-primary text-white">
+                            <h5 class="card-title mb-0">@audiencia.TipoAudiencia</h5>
+                        </div>
+                        <div class="card-body">
+                            <p class="card-text">
+                                <strong>📅 Fecha:</strong> @audiencia.FechaHora.ToString("dd/MM/yyyy HH:mm")<br>
+                                <strong>📝 Título:</strong> @audiencia.Titulo<br>
+                                <strong>📊 Estado:</strong> <span class="badge bg-info">@audiencia.EstadoAudiencia</span>
+                            </p>
+                            @if (!string.IsNullOrEmpty(audiencia.SalaAudiencia))
+                            {
+                                <p class="card-text">
+                                    <strong>🏛️ Sala:</strong> @audiencia.SalaAudiencia
+                                </p>
+                            }
+                            @if (!string.IsNullOrEmpty(audiencia.JuezId))
+                            {
+                                <p class="card-text">
+                                    <strong>⚖️ Juez:</strong> @audiencia.JuezId
+                                </p>
+                            }
+                        </div>
+                        <div class="card-footer">
+                            <div class="btn-group w-100" role="group">
+                                <button class="btn btn-outline-primary btn-sm" @onclick="() => EditAudiencia(audiencia)">
+                                    <span class="oi oi-pencil" aria-hidden="true"></span> Editar
+                                </button>
+                                <button class="btn btn-outline-danger btn-sm" @onclick="() => DeleteAudiencia(audiencia.Id)">
+                                    <span class="oi oi-trash" aria-hidden="true"></span> Eliminar
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+</div>
+
+<!-- Modal para Crear/Editar Audiencia -->
+@if (showModal)
+{
+    <div class="modal fade show d-block" tabindex="-1" style="background-color: rgba(0,0,0,0.5);">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">@(isEditing ? "Editar Audiencia" : "Nueva Audiencia")</h5>
+                    <button type="button" class="btn-close" @onclick="CloseModal"></button>
+                </div>
+                <div class="modal-body">
+                    <EditForm Model="currentAudiencia" OnValidSubmit="SaveAudiencia">
+                        <DataAnnotationsValidator />
+                        <ValidationSummary class="text-danger" />
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Título</label>
+                                <InputText class="form-control" @bind-Value="currentAudiencia.Titulo" placeholder="Título de la audiencia" />
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Tipo de Audiencia</label>
+                                <InputSelect class="form-select" @bind-Value="currentAudiencia.TipoAudiencia">
+                                    <option value="">Seleccionar tipo...</option>
+                                    <option value="Inicial">Inicial</option>
+                                    <option value="Intermedia">Intermedia</option>
+                                    <option value="Juicio Oral">Juicio Oral</option>
+                                    <option value="Sentencia">Sentencia</option>
+                                    <option value="Apelación">Apelación</option>
+                                </InputSelect>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Fecha y Hora</label>
+                                <InputDate Type="InputDateType.DateTimeLocal" class="form-control" @bind-Value="currentAudiencia.FechaHora" />
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Sala de Audiencia</label>
+                                <InputText class="form-control" @bind-Value="currentAudiencia.SalaAudiencia" placeholder="Ej: Sala 1, Sala Principal..." />
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Estado</label>
+                                <InputSelect class="form-select" @bind-Value="currentAudiencia.EstadoAudiencia">
+                                    <option value="Programada">Programada</option>
+                                    <option value="En Proceso">En Proceso</option>
+                                    <option value="Finalizada">Finalizada</option>
+                                    <option value="Suspendida">Suspendida</option>
+                                    <option value="Cancelada">Cancelada</option>
+                                </InputSelect>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">ID del Juez</label>
+                                <InputText class="form-control" @bind-Value="currentAudiencia.JuezId" placeholder="ID del juez responsable" />
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Observaciones</label>
+                            <InputTextArea class="form-control" rows="3" @bind-Value="currentAudiencia.Observaciones" placeholder="Observaciones adicionales..." />
+                        </div>
+
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" @onclick="CloseModal">Cancelar</button>
+                            <button type="submit" class="btn btn-primary">
+                                <span class="oi oi-check" aria-hidden="true"></span> @(isEditing ? "Actualizar" : "Crear")
+                            </button>
+                        </div>
+                    </EditForm>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+@code {
+    private List<AudienciaDto> audiencias = new();
+    private bool loading = true;
+    private bool showModal = false;
+    private bool isEditing = false;
+    private AudienciaDto currentAudiencia = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadAudiencias();
+    }
+
+    private async Task LoadAudiencias()
+    {
+        loading = true;
+        try
+        {
+            var domainAudiencias = await AudienciaService.GetAllAsync();
+            audiencias = domainAudiencias.Select(a => new AudienciaDto(a)).ToList();
+        }
+        catch (Exception ex)
+        {
+            NotificationService.ShowError($"Error al cargar audiencias: {ex.Message}");
+        }
+        finally
+        {
+            loading = false;
+        }
+    }
+
+    private void ShowCreateModal()
+    {
+        currentAudiencia = new AudienciaDto
+        {
+            Id = Guid.NewGuid(),
+            FechaHora = DateTime.Now.AddDays(1),
+            EstadoAudiencia = "Programada"
+        };
+        isEditing = false;
+        showModal = true;
+    }
+
+    private void EditAudiencia(AudienciaDto audiencia)
+    {
+        currentAudiencia = new AudienciaDto
+        {
+            Id = audiencia.Id,
+            Titulo = audiencia.Titulo,
+            TipoAudiencia = audiencia.TipoAudiencia,
+            FechaHora = audiencia.FechaHora,
+            SalaAudiencia = audiencia.SalaAudiencia,
+            JuezId = audiencia.JuezId,
+            EstadoAudiencia = audiencia.EstadoAudiencia,
+            Observaciones = audiencia.Observaciones
+        };
+        isEditing = true;
+        showModal = true;
+    }
+
+    private void CloseModal()
+    {
+        showModal = false;
+        currentAudiencia = new AudienciaDto();
+    }
+
+    private async Task SaveAudiencia()
+    {
+        try
+        {
+            bool success;
+            var domainAudiencia = currentAudiencia.ToEntity();
+            
+            if (isEditing)
+            {
+                success = await AudienciaService.UpdateAsync(currentAudiencia.Id, domainAudiencia);
+            }
+            else
+            {
+                success = await AudienciaService.CreateAsync(domainAudiencia);
+            }
+
+            if (success)
+            {
+                NotificationService.ShowSuccess(isEditing ? "Audiencia actualizada exitosamente" : "Audiencia creada exitosamente");
+                CloseModal();
+                await LoadAudiencias();
+            }
+            else
+            {
+                NotificationService.ShowError("Error al guardar la audiencia");
+            }
+        }
+        catch (Exception ex)
+        {
+            NotificationService.ShowError($"Error: {ex.Message}");
+        }
+    }
+
+    private async Task DeleteAudiencia(Guid id)
+    {
+        var confirm = await JSRuntime.InvokeAsync<bool>("confirm", "¿Estás seguro de que deseas eliminar esta audiencia?");
+        if (confirm)
+        {
+            try
+            {
+                var success = await AudienciaService.DeleteAsync(id);
+                if (success)
+                {
+                    NotificationService.ShowSuccess("Audiencia eliminada exitosamente");
+                    await LoadAudiencias();
+                }
+                else
+                {
+                    NotificationService.ShowError("Error al eliminar la audiencia");
+                }
+            }
+            catch (Exception ex)
+            {
+                NotificationService.ShowError($"Error: {ex.Message}");
+            }
+        }
+    }
+}

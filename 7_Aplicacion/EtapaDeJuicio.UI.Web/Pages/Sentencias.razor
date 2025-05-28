@@ -1,0 +1,334 @@
+@page "/sentencias"
+@using EtapaDeJuicio.Domain.Entities.Sentencias
+@using EtapaDeJuicio.UI.Web.Services
+@using EtapaDeJuicio.UI.Web.Models
+@using Microsoft.AspNetCore.Components.Forms
+@inject SentenciaService SentenciaService
+@inject DeliberacionService DeliberacionService
+@inject NotificationService NotificationService
+@inject IJSRuntime JSRuntime
+
+<PageTitle>Gestión de Sentencias</PageTitle>
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h1>⚖️ Gestión de Sentencias</h1>
+                <button class="btn btn-danger" @onclick="ShowCreateModal">
+                    <span class="oi oi-plus" aria-hidden="true"></span> Nueva Sentencia
+                </button>
+            </div>
+        </div>
+    </div>    @if (isLoading)
+    {
+        <div class="text-center">
+            <div class="spinner-border text-danger" role="status">
+                <span class="visually-hidden">Cargando...</span>
+            </div>
+            <p>Cargando sentencias...</p>
+        </div>
+    }
+    else if (filteredSentencias == null || !filteredSentencias.Any())
+    {
+        <div class="alert alert-info" role="alert">
+            <h4 class="alert-heading">No hay sentencias registradas</h4>
+            <p>No se encontraron sentencias en el sistema. ¡Crea la primera sentencia!</p>
+        </div>
+    }
+    else
+    {
+        <div class="row">
+            @foreach (var sentencia in sentencias)
+            {
+                <div class="col-md-6 col-lg-4 mb-4">
+                    <div class="card h-100 border-danger">
+                        <div class="card-header bg-danger text-white">
+                            <h5 class="card-title mb-0">@GetSentenciaIcon(sentencia.TipoSentencia) @sentencia.TipoSentencia</h5>
+                        </div>
+                        <div class="card-body">
+                            <p class="card-text">
+                                <strong>📅 Fecha:</strong> @sentencia.FechaEmision.ToString("dd/MM/yyyy")<br>
+                                <strong>👨‍⚖️ Juez:</strong> @sentencia.JuezId<br>
+                                <strong>🏛️ Audiencia:</strong> @sentencia.AudienciaId<br>
+                                <strong>📊 Estado:</strong> <span class="badge @GetEstadoBadgeClass(sentencia.EstadoSentencia)">@sentencia.EstadoSentencia</span>
+                            </p>
+                            @if (!string.IsNullOrEmpty(sentencia.ResumenDecision))
+                            {
+                                <p class="card-text">
+                                    <strong>📋 Decisión:</strong><br>
+                                    <small class="text-muted">@(sentencia.ResumenDecision.Length > 100 ? sentencia.ResumenDecision[..100] + "..." : sentencia.ResumenDecision)</small>
+                                </p>
+                            }
+                        </div>
+                        <div class="card-footer">
+                            <div class="btn-group w-100" role="group">                                <button class="btn btn-outline-danger btn-sm" @onclick="() => ViewDetails(sentencia)">
+                                    <span class="oi oi-eye" aria-hidden="true"></span> Ver
+                                </button>
+                                <button class="btn btn-outline-primary btn-sm" @onclick="() => EditSentencia(sentencia)">
+                                    <span class="oi oi-pencil" aria-hidden="true"></span> Editar
+                                </button>
+                                <button class="btn btn-outline-secondary btn-sm" @onclick="() => DeleteSentencia(sentencia)">
+                                    <span class="oi oi-trash" aria-hidden="true"></span> Eliminar
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+</div>
+
+<!-- Modal para Crear/Editar Sentencia -->
+@if (showModal)
+{
+    <div class="modal fade show d-block" tabindex="-1" style="background-color: rgba(0,0,0,0.5);">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">@(isEditing ? "Editar Sentencia" : "Nueva Sentencia")</h5>
+                    <button type="button" class="btn-close" @onclick="HideModal"></button>
+                </div>
+                <div class="modal-body">
+                    <EditForm Model="currentSentencia" OnValidSubmit="SaveSentencia">
+                        <DataAnnotationsValidator />
+                        <ValidationSummary class="text-danger" />
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Tipo de Sentencia</label>
+                                <InputSelect class="form-select" @bind-Value="currentSentencia.TipoSentencia">
+                                    <option value="">Seleccionar tipo...</option>
+                                    <option value="Absolutoria">Absolutoria</option>
+                                    <option value="Condenatoria">Condenatoria</option>
+                                    <option value="Mixta">Mixta</option>
+                                    <option value="Sobreseimiento">Sobreseimiento</option>
+                                </InputSelect>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Fecha de Emisión</label>
+                                <InputDate class="form-control" @bind-Value="currentSentencia.FechaEmision" />
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">ID del Juez</label>
+                                <InputText class="form-control" @bind-Value="currentSentencia.JuezId" placeholder="ID del juez responsable" />
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">ID de la Audiencia</label>
+                                <InputText class="form-control" @bind-Value="currentSentencia.AudienciaId" placeholder="ID de la audiencia relacionada" />
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Estado de la Sentencia</label>
+                                <InputSelect class="form-select" @bind-Value="currentSentencia.EstadoSentencia">
+                                    <option value="Borrador">Borrador</option>
+                                    <option value="En Revisión">En Revisión</option>
+                                    <option value="Firmada">Firmada</option>
+                                    <option value="Notificada">Notificada</option>
+                                    <option value="Ejecutada">Ejecutada</option>
+                                    <option value="Apelada">Apelada</option>
+                                </InputSelect>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Fecha de Notificación</label>
+                                <InputDate class="form-control" @bind-Value="currentSentencia.FechaNotificacion" />
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Resumen de la Decisión</label>
+                            <InputTextArea class="form-control" rows="4" @bind-Value="currentSentencia.ResumenDecision" placeholder="Resumen de la decisión judicial..." />
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">Fundamentos Legales</label>
+                            <InputTextArea class="form-control" rows="3" @bind-Value="currentSentencia.FundamentosLegales" placeholder="Fundamentos legales de la sentencia..." />
+                        </div>
+
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" @onclick="HideModal">Cancelar</button>
+                            <button type="submit" class="btn btn-danger">
+                                <span class="oi oi-check" aria-hidden="true"></span> @(isEditing ? "Actualizar" : "Crear")
+                            </button>
+                        </div>
+                    </EditForm>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+@code {
+    private List<SentenciaDto> sentencias = new();
+    private List<SentenciaDto> filteredSentencias = new();
+    private bool isLoading = true;
+    private bool showModal = false;
+    private bool isEditing = false;
+    private bool isSaving = false;
+    private SentenciaDto currentSentencia = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadSentencias();
+    }    private async Task LoadSentencias()
+    {
+        try
+        {
+            isLoading = true;
+            sentencias = await SentenciaService.GetAllDtosAsync();
+            filteredSentencias = sentencias.ToList();
+        }
+        catch (Exception ex)
+        {
+            NotificationService.ShowError($"Error al cargar sentencias: {ex.Message}");
+        }
+        finally
+        {
+            isLoading = false;
+        }
+    }
+
+    private void ShowCreateModal()
+    {
+        currentSentencia = new SentenciaDto
+        {
+            Id = Guid.NewGuid(),
+            FechaEmision = DateTime.Now,
+            EstadoSentencia = "Borrador"
+        };
+        isEditing = false;
+        showModal = true;
+    }
+
+    private void EditSentencia(SentenciaDto sentencia)
+    {
+        currentSentencia = new SentenciaDto
+        {
+            Id = sentencia.Id,
+            TipoSentencia = sentencia.TipoSentencia,
+            FechaEmision = sentencia.FechaEmision,
+            JuezId = sentencia.JuezId,
+            AudienciaId = sentencia.AudienciaId,
+            EstadoSentencia = sentencia.EstadoSentencia,
+            FechaNotificacion = sentencia.FechaNotificacion,
+            Descripcion = sentencia.Descripcion,
+            ResumenDecision = sentencia.ResumenDecision,
+            FundamentosLegales = sentencia.FundamentosLegales,
+            Resolutivos = sentencia.Resolutivos
+        };
+        isEditing = true;
+        showModal = true;
+    }
+
+    private async Task ViewDetails(SentenciaDto sentencia)
+    {
+        var detalles = $"Sentencia: {sentencia.TipoSentencia}\\n" +
+                      $"Fecha: {sentencia.FechaEmision:dd/MM/yyyy}\\n" +
+                      $"Juez: {sentencia.JuezId}\\n" +
+                      $"Estado: {sentencia.EstadoSentencia}\\n" +
+                      $"Descripción: {sentencia.Descripcion}\\n" +
+                      $"Decisión: {sentencia.ResumenDecision}";
+        
+        await JSRuntime.InvokeVoidAsync("alert", detalles);
+    }
+
+    private void HideModal()
+    {
+        showModal = false;
+        currentSentencia = new();
+    }    private async Task SaveSentencia()
+    {
+        try
+        {
+            isSaving = true;
+
+            if (isEditing)
+            {
+                await SentenciaService.UpdateFromDtoAsync(currentSentencia);
+                NotificationService.ShowSuccess("La sentencia ha sido actualizada exitosamente.");
+            }
+            else
+            {
+                await SentenciaService.CreateFromDtoAsync(currentSentencia);
+                NotificationService.ShowSuccess("La sentencia ha sido creada exitosamente.");
+            }
+
+            await LoadSentencias();
+            HideModal();
+        }
+        catch (Exception ex)
+        {
+            NotificationService.ShowError($"Error al guardar: {ex.Message}");
+        }
+        finally
+        {
+            isSaving = false;
+        }
+    }    private async Task DeleteSentencia(SentenciaDto sentencia)
+    {
+        if (await JSRuntime.InvokeAsync<bool>("confirm", $"¿Está seguro de eliminar la sentencia {sentencia.TipoSentencia}?"))
+        {
+            try
+            {
+                await SentenciaService.DeleteAsync(sentencia.Id);
+                NotificationService.ShowSuccess("La sentencia ha sido eliminada exitosamente.");
+                await LoadSentencias();
+            }
+            catch (Exception ex)
+            {
+                NotificationService.ShowError($"Error al eliminar: {ex.Message}");
+            }
+        }
+    }
+
+    private void FilterByType(ChangeEventArgs e)
+    {
+        ApplyFilters(tipoFilter: e.Value?.ToString());
+    }
+
+    private void FilterByStatus(ChangeEventArgs e)
+    {
+        ApplyFilters(estadoFilter: e.Value?.ToString());
+    }
+
+    private void FilterByDescription(ChangeEventArgs e)
+    {
+        ApplyFilters(descripcionFilter: e.Value?.ToString());
+    }
+
+    private void ApplyFilters(string? tipoFilter = null, string? estadoFilter = null, string? descripcionFilter = null)
+    {
+        filteredSentencias = sentencias.Where(s =>
+            (string.IsNullOrEmpty(tipoFilter) || s.TipoSentencia.Contains(tipoFilter, StringComparison.OrdinalIgnoreCase)) &&
+            (string.IsNullOrEmpty(estadoFilter) || s.EstadoSentencia.Contains(estadoFilter, StringComparison.OrdinalIgnoreCase)) &&
+            (string.IsNullOrEmpty(descripcionFilter) || s.Descripcion.Contains(descripcionFilter, StringComparison.OrdinalIgnoreCase))
+        ).ToList();
+    }
+
+    private string GetSentenciaIcon(string? tipoSentencia)
+    {
+        return tipoSentencia switch
+        {
+            "Absolutoria" => "🆓",
+            "Condenatoria" => "⚖️",
+            _ => "📋"
+        };
+    }
+
+    private string GetEstadoBadgeClass(string? estado)
+    {
+        return estado switch
+        {
+            "Emitida" => "bg-success",
+            "Notificada" => "bg-info",
+            "Borrador" => "bg-secondary",
+            _ => "bg-secondary"
+        };
+    }
+}

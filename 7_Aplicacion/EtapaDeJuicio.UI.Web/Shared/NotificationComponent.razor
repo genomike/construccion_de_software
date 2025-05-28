@@ -1,0 +1,108 @@
+@using EtapaDeJuicio.UI.Web.Services
+@inject NotificationService NotificationService
+@implements IDisposable
+
+@if (notifications.Any())
+{
+    <div class="notification-container position-fixed top-0 end-0 p-3" style="z-index: 1060;">
+        @foreach (var notification in notifications)
+        {
+            <div class="alert alert-@GetAlertClass(notification.Type) alert-dismissible fade show" role="alert">
+                @GetIcon(notification.Type) @notification.Message
+                <button type="button" class="btn-close" @onclick="() => RemoveNotification(notification.Id)"></button>
+            </div>
+        }
+    </div>
+}
+
+@code {
+    private List<NotificationItem> notifications = new();
+    private Timer? cleanupTimer;
+
+    protected override void OnInitialized()
+    {
+        NotificationService.OnNotification += HandleNotification;
+        cleanupTimer = new Timer(CleanupExpiredNotifications, null, TimeSpan.FromSeconds(1), TimeSpan.FromSeconds(1));
+    }
+
+    private void HandleNotification(string message, NotificationType type)
+    {
+        var notification = new NotificationItem
+        {
+            Id = Guid.NewGuid(),
+            Message = message,
+            Type = type,
+            Timestamp = DateTime.Now
+        };
+
+        notifications.Add(notification);
+        
+        InvokeAsync(StateHasChanged);
+
+        // Auto-remove after 5 seconds
+        Task.Delay(5000).ContinueWith(_ =>
+        {
+            RemoveNotification(notification.Id);
+        });
+    }
+
+    private void RemoveNotification(Guid id)
+    {
+        notifications.RemoveAll(n => n.Id == id);
+        InvokeAsync(StateHasChanged);
+    }
+
+    private void CleanupExpiredNotifications(object? state)
+    {
+        var expiredNotifications = notifications
+            .Where(n => DateTime.Now - n.Timestamp > TimeSpan.FromSeconds(10))
+            .ToList();
+
+        if (expiredNotifications.Any())
+        {
+            foreach (var notification in expiredNotifications)
+            {
+                notifications.Remove(notification);
+            }
+            InvokeAsync(StateHasChanged);
+        }
+    }
+
+    private string GetAlertClass(NotificationType type)
+    {
+        return type switch
+        {
+            NotificationType.Success => "success",
+            NotificationType.Error => "danger",
+            NotificationType.Warning => "warning",
+            NotificationType.Info => "info",
+            _ => "info"
+        };
+    }
+
+    private string GetIcon(NotificationType type)
+    {
+        return type switch
+        {
+            NotificationType.Success => "✅",
+            NotificationType.Error => "❌",
+            NotificationType.Warning => "⚠️",
+            NotificationType.Info => "ℹ️",
+            _ => "ℹ️"
+        };
+    }
+
+    public void Dispose()
+    {
+        NotificationService.OnNotification -= HandleNotification;
+        cleanupTimer?.Dispose();
+    }
+
+    private class NotificationItem
+    {
+        public Guid Id { get; set; }
+        public string Message { get; set; } = "";
+        public NotificationType Type { get; set; }
+        public DateTime Timestamp { get; set; }
+    }
+}
