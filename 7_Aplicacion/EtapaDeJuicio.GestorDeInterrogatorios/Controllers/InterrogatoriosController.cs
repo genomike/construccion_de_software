@@ -185,6 +185,51 @@ public class InterrogatoriosController : ControllerBase
             _logger.LogError(ex, "Error al realizar objeción en interrogatorio {Id}", id);
             return StatusCode(500, "Error interno del servidor");
         }
+    }    /// <summary>
+    /// Obtiene todos los interrogatorios
+    /// </summary>
+    [HttpGet]
+    public async Task<ActionResult<IEnumerable<InterrogatorioDto>>> ObtenerTodosLosInterrogatorios()
+    {
+        try
+        {
+            _logger.LogInformation("Solicitud de todos los interrogatorios");
+            
+            // TODO: Implementar query para obtener todos los interrogatorios
+            // Por ahora retornamos una lista vacía
+            return Ok(new List<InterrogatorioDto>());
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error al obtener todos los interrogatorios");
+            return StatusCode(500, "Error interno del servidor");
+        }
+    }
+
+    /// <summary>
+    /// Crea un nuevo interrogatorio genérico
+    /// </summary>
+    [HttpPost]
+    public async Task<ActionResult<Guid>> CrearInterrogatorio([FromBody] CrearInterrogatorioRequest request)
+    {
+        try
+        {
+            var interrogatorioId = request.Id != Guid.Empty ? request.Id : Guid.NewGuid();
+            
+            _logger.LogInformation(
+                "Creando interrogatorio genérico {InterrogatorioId} con pregunta: {Pregunta}",
+                interrogatorioId, request.Pregunta);
+
+            // TODO: Implementar comando para crear interrogatorio genérico
+            // Por ahora retornamos el ID creado
+            
+            return CreatedAtAction(nameof(ObtenerInterrogatorio), new { id = interrogatorioId }, interrogatorioId);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error al crear interrogatorio genérico");
+            return StatusCode(500, "Error interno del servidor");
+        }
     }
 }
 
@@ -194,6 +239,7 @@ public record IniciarInterrogatorioAcusadoRequest(Guid AudienciaId, Guid Acusado
 public record RealizarPreguntaRequest(string Pregunta, Guid PreguntadoPor, DateTime Timestamp);
 public record RegistrarRespuestaRequest(string Respuesta, DateTime Timestamp, string Observaciones);
 public record RealizarObjecionRequest(Guid ObjetorId, string Motivo, DateTime Timestamp);
+public record CrearInterrogatorioRequest(Guid Id, string? Pregunta, string? Respuesta, DateTime FechaHora, string? Tipo);
 
 // DTO para respuesta
 public record InterrogatorioDto(

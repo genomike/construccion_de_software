@@ -28,16 +28,19 @@
             </div>
             <p>Cargando sentencias...</p>
         </div>
-    }
-    else if (filteredSentencias == null || !filteredSentencias.Any())
+    }    else if (filteredSentencias == null || !filteredSentencias.Any())
     {
         <div class="alert alert-info" role="alert">
             <h4 class="alert-heading">No hay sentencias registradas</h4>
             <p>No se encontraron sentencias en el sistema. ¡Crea la primera sentencia!</p>
+            <p><strong>Debug info:</strong> sentencias es null: @(sentencias == null), cuenta: @(sentencias?.Count ?? 0), filteredSentencias cuenta: @(filteredSentencias?.Count ?? 0)</p>
         </div>
     }
     else
     {
+        <div class="alert alert-success" role="alert">
+            <strong>✅ Sentencias cargadas:</strong> Se encontraron @filteredSentencias.Count sentencia(s) en el sistema.
+        </div>
         <div class="row">
             @foreach (var sentencia in sentencias)
             {
@@ -178,19 +181,38 @@
         await LoadSentencias();
     }    private async Task LoadSentencias()
     {
+        Console.WriteLine("=== STARTING LoadSentencias() ===");
         try
         {
             isLoading = true;
+            Console.WriteLine("Calling SentenciaService.GetAllDtosAsync()...");
             sentencias = await SentenciaService.GetAllDtosAsync();
+            Console.WriteLine($"Received {sentencias.Count} sentencias from service");
+            
+            if (sentencias.Any())
+            {
+                var primera = sentencias.First();
+                Console.WriteLine($"Primera sentencia - ID: {primera.Id}, Tipo: {primera.TipoSentencia}");
+            }
+            else
+            {
+                Console.WriteLine("*** NO SENTENCIAS RETURNED FROM SERVICE ***");
+            }
+            
             filteredSentencias = sentencias.ToList();
+            Console.WriteLine($"=== SENTENCIAS LOADED: {sentencias.Count} ===");
+            StateHasChanged();
         }
         catch (Exception ex)
         {
+            Console.WriteLine($"*** ERROR IN LoadSentencias: {ex.Message} ***");
+            Console.WriteLine($"Stack trace: {ex.StackTrace}");
             NotificationService.ShowError($"Error al cargar sentencias: {ex.Message}");
         }
         finally
         {
             isLoading = false;
+            Console.WriteLine("=== LoadSentencias() FINISHED ===");
         }
     }
 

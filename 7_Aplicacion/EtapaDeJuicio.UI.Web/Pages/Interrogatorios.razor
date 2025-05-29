@@ -28,16 +28,19 @@
             </div>
             <p>Cargando interrogatorios...</p>
         </div>
-    }
-    else if (interrogatorios == null || !interrogatorios.Any())
+    }    else if (interrogatorios == null || !interrogatorios.Any())
     {
         <div class="alert alert-info" role="alert">
             <h4 class="alert-heading">No hay interrogatorios registrados</h4>
             <p>No se encontraron interrogatorios en el sistema. ¡Crea el primer interrogatorio!</p>
+            <p><strong>Debug info:</strong> interrogatorios es null: @(interrogatorios == null), cuenta: @(interrogatorios?.Count ?? 0)</p>
         </div>
     }
     else
     {
+        <div class="alert alert-success" role="alert">
+            <strong>✅ Interrogatorios cargados:</strong> Se encontraron @interrogatorios.Count interrogatorio(s) en el sistema.
+        </div>
         <div class="row">
             @foreach (var interrogatorio in interrogatorios)
             {
@@ -184,23 +187,40 @@
     protected override async Task OnInitializedAsync()
     {
         await LoadInterrogatorios();
-    }
-
-    private async Task LoadInterrogatorios()
+    }    private async Task LoadInterrogatorios()
     {
+        Console.WriteLine("=== STARTING LoadInterrogatorios() ===");
         loading = true;
         try
         {
+            Console.WriteLine("Calling InterrogatorioService.GetAllAsync()...");
             var domainInterrogatorios = await InterrogatorioService.GetAllAsync();
+            Console.WriteLine($"Received {domainInterrogatorios.Count} domain interrogatorios from service");
+            
+            if (domainInterrogatorios.Any())
+            {
+                var primero = domainInterrogatorios.First();
+                Console.WriteLine($"Primer interrogatorio - ID: {primero.Id}, Descripcion: {primero.Descripcion}");
+            }
+            else
+            {
+                Console.WriteLine("*** NO INTERROGATORIOS RETURNED FROM SERVICE ***");
+            }
+            
             interrogatorios = domainInterrogatorios.Select(i => new InterrogatorioDto(i)).ToList();
+            Console.WriteLine($"=== CONVERSION COMPLETE: {interrogatorios.Count} DTOs created ===");
+            StateHasChanged();
         }
         catch (Exception ex)
         {
+            Console.WriteLine($"*** ERROR IN LoadInterrogatorios: {ex.Message} ***");
+            Console.WriteLine($"Stack trace: {ex.StackTrace}");
             NotificationService.ShowError($"Error al cargar interrogatorios: {ex.Message}");
         }
         finally
         {
             loading = false;
+            Console.WriteLine("=== LoadInterrogatorios() FINISHED ===");
         }
     }
 

@@ -1,0 +1,130 @@
+[
+  {
+    "Status": "❌ FAILED",
+    "Method": "GET",
+    "Error": "Response status code does not indicate success: 405 (Method Not Allowed).",
+    "Url": "https://localhost:7000/api/interrogatorios",
+    "Response": null,
+    "Description": "Obtener todos los interrogatorios"
+  },
+  {
+    "Status": "✅ SUCCESS",
+    "Method": "POST",
+    "Error": null,
+    "Url": "https://localhost:7000/api/interrogatorios",
+    "Response": "12345678-1234-1234-1234-123456789012",
+    "Description": "Crear interrogatorio"
+  },
+  {
+    "Status": "❌ FAILED",
+    "Method": "GET",
+    "Error": "Response status code does not indicate success: 502 (Bad Gateway).",
+    "Url": "https://localhost:7000/api/audiencias",
+    "Response": null,
+    "Description": "Obtener todas las audiencias"
+  },
+  {
+    "Status": "❌ FAILED",
+    "Method": "POST",
+    "Error": "Response status code does not indicate success: 502 (Bad Gateway).",
+    "Url": "https://localhost:7000/api/audiencias",
+    "Response": null,
+    "Description": "Crear audiencia"
+  },
+  {
+    "Status": "❌ FAILED",
+    "Method": "GET",
+    "Error": "Response status code does not indicate success: 502 (Bad Gateway).",
+    "Url": "https://localhost:7000/api/sentencias",
+    "Response": null,
+    "Description": "Obtener todas las sentencias"
+  },
+  {
+    "Status": "❌ FAILED",
+    "Method": "POST",
+    "Error": "Response status code does not indicate success: 502 (Bad Gateway).",
+    "Url": "https://localhost:7000/api/sentencias",
+    "Response": null,
+    "Description": "Crear sentencia"
+  },
+  {
+    "Status": "❌ FAILED",
+    "Method": "GET",
+    "Error": "Response status code does not indicate success: 502 (Bad Gateway).",
+    "Url": "https://localhost:7000/api/sentencias/deliberaciones",
+    "Response": null,
+    "Description": "Obtener deliberaciones"
+  },
+  {
+    "Status": "❌ FAILED",
+    "Method": "POST",
+    "Error": "Response status code does not indicate success: 502 (Bad Gateway).",
+    "Url": "https://localhost:7000/api/sentencias/deliberaciones",
+    "Response": null,
+    "Description": "Crear deliberación"
+  },
+  {
+    "Status": "❌ FAILED",
+    "Method": "GET",
+    "Error": "Response status code does not indicate success: 502 (Bad Gateway).",
+    "Url": "https://localhost:7000/api/pruebas",
+    "Response": null,
+    "Description": "Obtener todas las pruebas"
+  },
+  {
+    "Status": "❌ FAILED",
+    "Method": "POST",
+    "Error": "Response status code does not indicate success: 502 (Bad Gateway).",
+    "Url": "https://localhost:7000/api/pruebas",
+    "Response": null,
+    "Description": "Crear prueba genérica"
+  },
+  {
+    "Status": "❌ FAILED",
+    "Method": "GET",
+    "Error": "Response status code does not indicate success: 502 (Bad Gateway).",
+    "Url": "https://localhost:7000/api/pruebas/documentales",
+    "Response": null,
+    "Description": "Obtener pruebas documentales"
+  },
+  {
+    "Status": "❌ FAILED",
+    "Method": "GET",
+    "Error": "Response status code does not indicate success: 502 (Bad Gateway).",
+    "Url": "https://localhost:7000/api/pruebas/testimoniales",
+    "Response": null,
+    "Description": "Obtener pruebas testimoniales"
+  },
+  {
+    "Status": "❌ FAILED",
+    "Method": "GET",
+    "Error": "Response status code does not indicate success: 502 (Bad Gateway).",
+    "Url": "https://localhost:7000/api/pruebas/periciales",
+    "Response": null,
+    "Description": "Obtener pruebas periciales"
+  },
+  {
+    "Status": "❌ FAILED",
+    "Method": "POST",
+    "Error": "Response status code does not indicate success: 502 (Bad Gateway).",
+    "Url": "https://localhost:7000/api/pruebas/documentales",
+    "Response": null,
+    "Description": "Crear prueba documental"
+  },
+  {
+    "Status": "❌ FAILED",
+    "Method": "POST",
+    "Error": "Response status code does not indicate success: 502 (Bad Gateway).",
+    "Url": "https://localhost:7000/api/pruebas/testimoniales",
+    "Response": null,
+    "Description": "Crear prueba testimonial"
+  },
+  {
+    "Status": "❌ FAILED",
+    "Method": "POST",
+    "Error": "Response status code does not indicate success: 502 (Bad Gateway).",
+    "Url": "https://localhost:7000/api/pruebas/periciales",
+    "Response": null,
+    "Description": "Crear prueba pericial"
+  }
+]

@@ -58,16 +58,19 @@
             </div>
             <p>Cargando pruebas...</p>
         </div>
-    }
-    else if (filteredPruebas == null || !filteredPruebas.Any())
+    }    else if (filteredPruebas == null || !filteredPruebas.Any())
     {
         <div class="alert alert-warning" role="alert">
             <h4 class="alert-heading">No hay pruebas registradas</h4>
             <p>No se encontraron pruebas en el sistema. ¡Crea la primera prueba!</p>
+            <p><strong>Debug info:</strong> pruebas es null: @(pruebas == null), cuenta: @(pruebas?.Count ?? 0), filteredPruebas cuenta: @(filteredPruebas?.Count ?? 0)</p>
         </div>
     }
     else
     {
+        <div class="alert alert-success" role="alert">
+            <strong>✅ Pruebas cargadas:</strong> Se encontraron @filteredPruebas.Count prueba(s) en el sistema (Total: @pruebas.Count).
+        </div>
         <div class="row">
             @foreach (var prueba in filteredPruebas)
             {
@@ -317,37 +320,47 @@
     protected override async Task OnInitializedAsync()
     {
         await LoadPruebas();
-    }
-
-    private async Task LoadPruebas()
+    }    private async Task LoadPruebas()
     {
+        Console.WriteLine("=== STARTING LoadPruebas() ===");
         try
         {
             loading = true;
             var allPruebas = new List<PruebaDto>();
 
             // Cargar pruebas documentales
+            Console.WriteLine("Loading pruebas documentales...");
             var documentales = await PruebaDocumentalService.GetAllAsync();
+            Console.WriteLine($"Received {documentales.Count} pruebas documentales");
             allPruebas.AddRange(documentales.Select(PruebaDto.FromPruebaDocumental));
 
             // Cargar pruebas testimoniales
+            Console.WriteLine("Loading pruebas testimoniales...");
             var testimoniales = await PruebaTestimonialService.GetAllAsync();
+            Console.WriteLine($"Received {testimoniales.Count} pruebas testimoniales");
             allPruebas.AddRange(testimoniales.Select(PruebaDto.FromPruebaTestimonial));
 
             // Cargar pruebas periciales
+            Console.WriteLine("Loading pruebas periciales...");
             var periciales = await PruebaPericialesService.GetAllAsync();
+            Console.WriteLine($"Received {periciales.Count} pruebas periciales");
             allPruebas.AddRange(periciales.Select(PruebaDto.FromPruebaPericial));
 
             pruebas = allPruebas.OrderByDescending(p => p.FechaPresentacion).ToList();
+            Console.WriteLine($"=== TOTAL PRUEBAS LOADED: {pruebas.Count} ===");
             ApplyFilters();
+            StateHasChanged();
         }
         catch (Exception ex)
         {
+            Console.WriteLine($"*** ERROR IN LoadPruebas: {ex.Message} ***");
+            Console.WriteLine($"Stack trace: {ex.StackTrace}");
             NotificationService.ShowError($"Error al cargar pruebas: {ex.Message}");
         }
         finally
         {
             loading = false;
+            Console.WriteLine("=== LoadPruebas() FINISHED ===");
         }
     }
 

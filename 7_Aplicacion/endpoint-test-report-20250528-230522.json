@@ -1,0 +1,143 @@
+[
+  {
+    "Status": "✅ SUCCESS",
+    "Method": "GET",
+    "Error": null,
+    "Url": "https://localhost:7000/api/interrogatorios",
+    "Response": [],
+    "Description": "Obtener todos los interrogatorios"
+  },
+  {
+    "Status": "✅ SUCCESS",
+    "Method": "POST",
+    "Error": null,
+    "Url": "https://localhost:7000/api/interrogatorios",
+    "Response": "12345678-1234-1234-1234-123456789012",
+    "Description": "Crear interrogatorio"
+  },
+  {
+    "Status": "✅ SUCCESS",
+    "Method": "GET",
+    "Error": null,
+    "Url": "https://localhost:7000/api/audiencias",
+    "Response": [
+      {
+        "id": "63d3fba7-dd3c-4e68-9f2e-c4fe530f0551",
+        "titulo": "Audiencia 01",
+        "fechaProgramada": "2025-05-29T10:30:00",
+        "tipoAudiencia": "JuicioOral",
+        "estado": "Programada",
+        "fechaInicio": null,
+        "fechaFin": null,
+        "duracion": null,
+        "participantes": [],
+        "actividades": []
+      }
+    ],
+    "Description": "Obtener todas las audiencias"
+  },
+  {
+    "Status": "❌ FAILED",
+    "Method": "POST",
+    "Error": "Response status code does not indicate success: 400 (Bad Request).",
+    "Url": "https://localhost:7000/api/audiencias",
+    "Response": null,
+    "Description": "Crear audiencia"
+  },
+  {
+    "Status": "✅ SUCCESS",
+    "Method": "GET",
+    "Error": null,
+    "Url": "https://localhost:7000/api/sentencias",
+    "Response": [],
+    "Description": "Obtener todas las sentencias"
+  },
+  {
+    "Status": "❌ FAILED",
+    "Method": "POST",
+    "Error": "Response status code does not indicate success: 400 (Bad Request).",
+    "Url": "https://localhost:7000/api/sentencias",
+    "Response": null,
+    "Description": "Crear sentencia"
+  },
+  {
+    "Status": "✅ SUCCESS",
+    "Method": "GET",
+    "Error": null,
+    "Url": "https://localhost:7000/api/sentencias/deliberaciones",
+    "Response": [],
+    "Description": "Obtener deliberaciones"
+  },
+  {
+    "Status": "❌ FAILED",
+    "Method": "POST",
+    "Error": "Response status code does not indicate success: 400 (Bad Request).",
+    "Url": "https://localhost:7000/api/sentencias/deliberaciones",
+    "Response": null,
+    "Description": "Crear deliberación"
+  },
+  {
+    "Status": "✅ SUCCESS",
+    "Method": "GET",
+    "Error": null,
+    "Url": "https://localhost:7000/api/pruebas",
+    "Response": [],
+    "Description": "Obtener todas las pruebas"
+  },
+  {
+    "Status": "✅ SUCCESS",
+    "Method": "POST",
+    "Error": null,
+    "Url": "https://localhost:7000/api/pruebas",
+    "Response": "a32d8394-1091-4803-b4c9-694c4fb0a91d",
+    "Description": "Crear prueba genérica"
+  },
+  {
+    "Status": "❌ FAILED",
+    "Method": "GET",
+    "Error": "Response status code does not indicate success: 400 (Bad Request).",
+    "Url": "https://localhost:7000/api/pruebas/documentales",
+    "Response": null,
+    "Description": "Obtener pruebas documentales"
+  },
+  {
+    "Status": "❌ FAILED",
+    "Method": "GET",
+    "Error": "Response status code does not indicate success: 400 (Bad Request).",
+    "Url": "https://localhost:7000/api/pruebas/testimoniales",
+    "Response": null,
+    "Description": "Obtener pruebas testimoniales"
+  },
+  {
+    "Status": "❌ FAILED",
+    "Method": "GET",
+    "Error": "Response status code does not indicate success: 400 (Bad Request).",
+    "Url": "https://localhost:7000/api/pruebas/periciales",
+    "Response": null,
+    "Description": "Obtener pruebas periciales"
+  },
+  {
+    "Status": "❌ FAILED",
+    "Method": "POST",
+    "Error": "Response status code does not indicate success: 400 (Bad Request).",
+    "Url": "https://localhost:7000/api/pruebas/documentales",
+    "Response": null,
+    "Description": "Crear prueba documental"
+  },
+  {
+    "Status": "❌ FAILED",
+    "Method": "POST",
+    "Error": "Response status code does not indicate success: 400 (Bad Request).",
+    "Url": "https://localhost:7000/api/pruebas/testimoniales",
+    "Response": null,
+    "Description": "Crear prueba testimonial"
+  },
+  {
+    "Status": "❌ FAILED",
+    "Method": "POST",
+    "Error": "Response status code does not indicate success: 400 (Bad Request).",
+    "Url": "https://localhost:7000/api/pruebas/periciales",
+    "Response": null,
+    "Description": "Crear prueba pericial"
+  }
+]

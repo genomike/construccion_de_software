@@ -175,6 +175,53 @@ public class PruebasController : ControllerBase
             return StatusCode(500, "Error interno del servidor");
         }
     }
+
+    /// <summary>
+    /// Obtiene todas las pruebas
+    /// </summary>
+    [HttpGet]
+    public async Task<ActionResult<IEnumerable<PruebaDto>>> ObtenerPruebas()
+    {
+        try
+        {
+            _logger.LogInformation("Solicitud de todas las pruebas");
+            
+            // TODO: Implementar query para obtener todas las pruebas
+            var pruebas = new List<PruebaDto>();
+            
+            return Ok(pruebas);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error al obtener todas las pruebas");
+            return StatusCode(500, "Error interno del servidor");
+        }
+    }
+
+    /// <summary>
+    /// Crea una nueva prueba genérica
+    /// </summary>
+    [HttpPost]
+    public async Task<ActionResult<Guid>> CrearPrueba([FromBody] CrearPruebaRequest request)
+    {
+        try
+        {
+            var pruebaId = Guid.NewGuid();
+            
+            _logger.LogInformation(
+                "Creando prueba genérica {PruebaId} - {Descripcion}",
+                pruebaId, request.Descripcion);
+
+            // TODO: Implementar comando para crear prueba genérica
+            
+            return CreatedAtAction(nameof(ObtenerPrueba), new { id = pruebaId }, pruebaId);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error al crear prueba genérica");
+            return StatusCode(500, "Error interno del servidor");
+        }
+    }
 }
 
 // DTOs para las requests
@@ -183,6 +230,7 @@ public record PresentarPruebaMaterialRequest(string Descripcion, string Presenta
 public record PresentarPruebaTestimonialRequest(string Descripcion, string PresentadaPor, string Testigo);
 public record PresentarPruebaPericialRequest(string Descripcion, string PresentadaPor, string Perito);
 public record ValidarPruebaRequest(string ValidadaPor, bool EsValida, string Observaciones);
+public record CrearPruebaRequest(string Descripcion, string PresentadaPor);
 
 // Clase simple para uso interno del controlador
 public class Prueba

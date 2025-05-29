@@ -2,13 +2,6 @@ using EtapaDeJuicio.Domain.Entities.Pruebas;
 
 namespace EtapaDeJuicio.UI.Web.Services
 {
-    public class InterrogatorioService : BaseApiService<Interrogatorio>
-    {
-        public InterrogatorioService(HttpClient httpClient) : base(httpClient, "/api/interrogatorios")
-        {
-        }
-    }
-
     public class PruebaDocumentalService : BaseApiService<PruebaDocumental>
     {
         public PruebaDocumentalService(HttpClient httpClient) : base(httpClient, "/api/pruebas/documentales")

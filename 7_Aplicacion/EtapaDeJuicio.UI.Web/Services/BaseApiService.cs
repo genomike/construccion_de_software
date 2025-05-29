@@ -17,20 +17,37 @@ namespace EtapaDeJuicio.UI.Web.Services
                 PropertyNameCaseInsensitive = true,
                 PropertyNamingPolicy = JsonNamingPolicy.CamelCase
             };
-        }
-
-        public virtual async Task<List<T>> GetAllAsync()
+        }        public virtual async Task<List<T>> GetAllAsync()
         {
             try
             {
                 var response = await _httpClient.GetAsync(_baseEndpoint);
-                response.EnsureSuccessStatusCode();
+                
+                if (!response.IsSuccessStatusCode)
+                {
+                    var errorContent = await response.Content.ReadAsStringAsync();
+                    Console.WriteLine($"HTTP Error {response.StatusCode}: {errorContent}");
+                    return new List<T>();
+                }
+
                 var json = await response.Content.ReadAsStringAsync();
-                return JsonSerializer.Deserialize<List<T>>(json, _jsonOptions) ?? new List<T>();
+                Console.WriteLine($"API Response for {typeof(T).Name}: {json}");
+                
+                if (string.IsNullOrWhiteSpace(json))
+                {
+                    Console.WriteLine("Empty response from API");
+                    return new List<T>();
+                }
+
+                var result = JsonSerializer.Deserialize<List<T>>(json, _jsonOptions);
+                Console.WriteLine($"Deserialized {result?.Count ?? 0} items of type {typeof(T).Name}");
+                
+                return result ?? new List<T>();
             }
             catch (Exception ex)
             {
                 Console.WriteLine($"Error getting {typeof(T).Name}: {ex.Message}");
+                Console.WriteLine($"Stack trace: {ex.StackTrace}");
                 return new List<T>();
             }
         }

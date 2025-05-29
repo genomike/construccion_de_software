@@ -217,84 +217,131 @@
         {
             isLoading = false;
         }
-    }
-
-    private async Task LoadDashboardData()
+    }    private async Task LoadDashboardData()
     {
+        Console.WriteLine("=== STARTING LoadDashboardData() ===");
+        isLoading = true;
+        
         // Cargar audiencias
         try
         {
+            Console.WriteLine("Loading audiencias...");
             var audiencias = await AudienciaService.GetAllAsync();
             if (audiencias != null)
             {
-                totalAudiencias = audiencias.Count();                audienciasActivas = audiencias.Count(a => a.Estado == EstadoAudiencia.EnCurso || 
+                totalAudiencias = audiencias.Count();
+                Console.WriteLine($"Total audiencias: {totalAudiencias}");
+                
+                audienciasActivas = audiencias.Count(a => a.Estado == EstadoAudiencia.EnCurso || 
                                                           a.Estado == EstadoAudiencia.Programada);
+                Console.WriteLine($"Audiencias activas: {audienciasActivas}");
+                
                 audienciasRecientes = audiencias.OrderByDescending(a => a.FechaInicio).ToList();
+            }
+            else
+            {
+                Console.WriteLine("*** NULL AUDIENCIAS RETURNED ***");
             }
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"Error loading audiencias: {ex.Message}");
-        }
-
-        // Cargar interrogatorios
+            Console.WriteLine($"*** ERROR loading audiencias: {ex.Message} ***");
+        }        // Cargar interrogatorios
         try
         {
+            Console.WriteLine("Loading interrogatorios...");
             var interrogatorios = await InterrogatorioService.GetAllAsync();
             if (interrogatorios != null)
             {
                 totalInterrogatorios = interrogatorios.Count();
+                Console.WriteLine($"Total interrogatorios: {totalInterrogatorios}");
+            }
+            else
+            {
+                Console.WriteLine("*** NULL INTERROGATORIOS RETURNED ***");
             }
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"Error loading interrogatorios: {ex.Message}");
+            Console.WriteLine($"*** ERROR loading interrogatorios: {ex.Message} ***");
         }
 
         // Cargar pruebas documentales
         try
         {
+            Console.WriteLine("Loading pruebas documentales...");
             var pruebasDoc = await PruebaDocumentalService.GetAllAsync();
             if (pruebasDoc != null)
             {
                 totalPruebasDocumentales = pruebasDoc.Count();
+                Console.WriteLine($"Total pruebas documentales: {totalPruebasDocumentales}");
+            }
+            else
+            {
+                Console.WriteLine("*** NULL PRUEBAS DOCUMENTALES RETURNED ***");
             }
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"Error loading pruebas documentales: {ex.Message}");
+            Console.WriteLine($"*** ERROR loading pruebas documentales: {ex.Message} ***");
         }
 
         // Cargar pruebas testimoniales
         try
         {
+            Console.WriteLine("Loading pruebas testimoniales...");
             var pruebasTest = await PruebaTestimonialService.GetAllAsync();
             if (pruebasTest != null)
             {
                 totalPruebasTestimoniales = pruebasTest.Count();
+                Console.WriteLine($"Total pruebas testimoniales: {totalPruebasTestimoniales}");
+            }
+            else
+            {
+                Console.WriteLine("*** NULL PRUEBAS TESTIMONIALES RETURNED ***");
             }
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"Error loading pruebas testimoniales: {ex.Message}");
+            Console.WriteLine($"*** ERROR loading pruebas testimoniales: {ex.Message} ***");
         }
 
         totalPruebas = totalPruebasDocumentales + totalPruebasTestimoniales;
+        Console.WriteLine($"Total pruebas combinadas: {totalPruebas}");
 
         // Cargar sentencias
         try
         {
+            Console.WriteLine("Loading sentencias...");
             var sentencias = await SentenciaService.GetAllAsync();
             if (sentencias != null)
             {
-                totalSentencias = sentencias.Count();                sentenciasFinales = sentencias.Count(s => s.Tipo == TipoSentencia.Definitiva);
+                totalSentencias = sentencias.Count();
+                Console.WriteLine($"Total sentencias: {totalSentencias}");
+                
+                sentenciasFinales = sentencias.Count(s => s.Tipo == TipoSentencia.Definitiva);
+                Console.WriteLine($"Sentencias finales: {sentenciasFinales}");
+                
                 sentenciasRecientes = sentencias.OrderByDescending(s => s.FechaEmision).ToList();
+            }
+            else
+            {
+                Console.WriteLine("*** NULL SENTENCIAS RETURNED ***");
             }
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"Error loading sentencias: {ex.Message}");
+            Console.WriteLine($"*** ERROR loading sentencias: {ex.Message} ***");
         }
+        
+        isLoading = false;
+        Console.WriteLine("=== DASHBOARD DATA LOADED SUMMARY ===");
+        Console.WriteLine($"Audiencias: {totalAudiencias} (Activas: {audienciasActivas})");
+        Console.WriteLine($"Interrogatorios: {totalInterrogatorios}");
+        Console.WriteLine($"Pruebas: {totalPruebas} (Doc: {totalPruebasDocumentales}, Test: {totalPruebasTestimoniales})");
+        Console.WriteLine($"Sentencias: {totalSentencias} (Finales: {sentenciasFinales})");
+        Console.WriteLine("=== LoadDashboardData() FINISHED ===");
+        StateHasChanged();
     }
 
     private string GetEstadoBadgeClass(string estado)

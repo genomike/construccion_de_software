@@ -18,9 +18,7 @@
                 </button>
             </div>
         </div>
-    </div>
-
-    @if (loading)
+    </div>    @if (loading)
     {
         <div class="text-center">
             <div class="spinner-border" role="status">
@@ -34,10 +32,14 @@
         <div class="alert alert-info" role="alert">
             <h4 class="alert-heading">No hay audiencias registradas</h4>
             <p>No se encontraron audiencias en el sistema. ¡Crea la primera audiencia!</p>
+            <p><strong>Debug info:</strong> audiencias es null: @(audiencias == null), cuenta: @(audiencias?.Count ?? 0)</p>
         </div>
     }
     else
     {
+        <div class="alert alert-success" role="alert">
+            <strong>✅ Audiencias cargadas:</strong> Se encontraron @audiencias.Count audiencia(s) en el sistema.
+        </div>
         <div class="row">
             @foreach (var audiencia in audiencias)
             {
@@ -166,28 +168,64 @@
     private bool loading = true;
     private bool showModal = false;
     private bool isEditing = false;
-    private AudienciaDto currentAudiencia = new();
-
-    protected override async Task OnInitializedAsync()
+    private AudienciaDto currentAudiencia = new();    protected override async Task OnInitializedAsync()
     {
+        Console.WriteLine("=== AUDIENCIAS COMPONENT INITIALIZED ===");
         await LoadAudiencias();
     }
 
     private async Task LoadAudiencias()
     {
+        Console.WriteLine("=== STARTING LoadAudiencias() ===");
         loading = true;
         try
         {
+            Console.WriteLine("Calling AudienciaService.GetAllAsync()...");
             var domainAudiencias = await AudienciaService.GetAllAsync();
-            audiencias = domainAudiencias.Select(a => new AudienciaDto(a)).ToList();
+            Console.WriteLine($"Received {domainAudiencias.Count} domain audiencias from service");
+            
+            // Debug: verificar el primer elemento si existe
+            if (domainAudiencias.Any())
+            {
+                var primera = domainAudiencias.First();
+                Console.WriteLine($"Primera audiencia - ID: {primera.Id}, Titulo: {primera.Titulo}, Tipo: {primera.Tipo}, Estado: {primera.Estado}");
+            }
+            else
+            {
+                Console.WriteLine("*** NO AUDIENCIAS RETURNED FROM SERVICE ***");
+            }
+            
+            Console.WriteLine("Converting domain entities to DTOs...");
+            audiencias = domainAudiencias.Select(a => 
+            {
+                try 
+                {
+                    Console.WriteLine($"Converting audiencia {a.Id}: {a.Titulo}");
+                    var dto = new AudienciaDto(a);
+                    Console.WriteLine($"Successfully converted audiencia {a.Id} to DTO");
+                    return dto;
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Error converting audiencia {a.Id}: {ex.Message}");
+                    Console.WriteLine($"Stack trace: {ex.StackTrace}");
+                    throw;
+                }
+            }).ToList();
+            
+            Console.WriteLine($"=== CONVERSION COMPLETE: {audiencias.Count} DTOs created ===");
+            StateHasChanged(); // Force UI update
         }
         catch (Exception ex)
         {
+            Console.WriteLine($"*** ERROR IN LoadAudiencias: {ex.Message} ***");
+            Console.WriteLine($"Stack trace: {ex.StackTrace}");
             NotificationService.ShowError($"Error al cargar audiencias: {ex.Message}");
         }
         finally
         {
             loading = false;
+            Console.WriteLine("=== LoadAudiencias() FINISHED ===");
         }
     }
 

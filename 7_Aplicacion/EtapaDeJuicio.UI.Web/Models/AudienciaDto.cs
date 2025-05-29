@@ -1,9 +1,9 @@
 using EtapaDeJuicio.Domain.Entities.Audiencias;
 
 namespace EtapaDeJuicio.UI.Web.Models
-{
-    public class AudienciaDto
-    {        public Guid Id { get; set; }
+{    public class AudienciaDto
+    {
+        public Guid Id { get; set; }
         public string Titulo { get; set; } = string.Empty;
         public DateTime FechaHora { get; set; }
         public string TipoAudiencia { get; set; } = string.Empty;
@@ -17,7 +17,8 @@ namespace EtapaDeJuicio.UI.Web.Models
 
         // Constructor desde entidad de dominio
         public AudienciaDto(Audiencia audiencia)
-        {            Id = audiencia.Id;
+        {
+            Id = audiencia.Id;
             Titulo = audiencia.Titulo;
             FechaHora = audiencia.FechaHoraProgramada;
             TipoAudiencia = audiencia.Tipo.ToString();

@@ -174,6 +174,75 @@ public class SentenciasController : ControllerBase
     }
 
     /// <summary>
+    /// Obtiene todas las sentencias
+    /// </summary>
+    [HttpGet]
+    public async Task<ActionResult<IEnumerable<SentenciaDto>>> ObtenerSentencias()
+    {
+        try
+        {
+            _logger.LogInformation("Solicitud de todas las sentencias");
+            
+            // TODO: Implementar query para obtener todas las sentencias
+            var sentencias = new List<SentenciaDto>();
+            
+            return Ok(sentencias);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error al obtener todas las sentencias");
+            return StatusCode(500, "Error interno del servidor");
+        }
+    }
+
+    /// <summary>
+    /// Obtiene todas las deliberaciones
+    /// </summary>
+    [HttpGet("deliberaciones")]
+    public async Task<ActionResult<IEnumerable<DeliberacionDto>>> ObtenerDeliberaciones()
+    {
+        try
+        {
+            _logger.LogInformation("Solicitud de todas las deliberaciones");
+            
+            // TODO: Implementar query para obtener todas las deliberaciones
+            var deliberaciones = new List<DeliberacionDto>();
+            
+            return Ok(deliberaciones);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error al obtener todas las deliberaciones");
+            return StatusCode(500, "Error interno del servidor");
+        }
+    }
+
+    /// <summary>
+    /// Crea una nueva deliberación genérica
+    /// </summary>
+    [HttpPost("deliberaciones")]
+    public async Task<ActionResult<Guid>> CrearDeliberacion([FromBody] CrearDeliberacionRequest request)
+    {
+        try
+        {
+            var deliberacionId = Guid.NewGuid();
+            
+            _logger.LogInformation(
+                "Creando deliberación genérica {DeliberacionId} para audiencia {AudienciaId}",
+                deliberacionId, request.AudienciaId);
+
+            // TODO: Implementar comando para crear deliberación genérica
+            
+            return CreatedAtAction(nameof(ObtenerDeliberacion), new { id = deliberacionId }, deliberacionId);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error al crear deliberación genérica");
+            return StatusCode(500, "Error interno del servidor");
+        }
+    }
+
+    /// <summary>
     /// Notifica la sentencia a las partes involucradas
     /// </summary>
     [HttpPost("{id}/notificar")]
@@ -232,6 +301,7 @@ public record EmitirSentenciaRequest(
     Guid JuezPonente,
     List<Guid> JuecesParticipantes);
 public record NotificarSentenciaRequest(List<Guid> Destinatarios, string MedioNotificacion);
+public record CrearDeliberacionRequest(Guid AudienciaId, string Descripcion, List<Guid> JuecesParticipantes);
 
 // DTOs para respuestas
 public record SentenciaDto(
