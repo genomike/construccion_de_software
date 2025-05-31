@@ -78,38 +78,78 @@ namespace EtapaDeJuicio.UI.Web.Services
                 Console.WriteLine($"Stack trace: {ex.StackTrace}");
                 return new List<Interrogatorio>();
             }
-        }
-
-        public async Task<bool> CreateAsync(Interrogatorio interrogatorio)
+        }        public async Task<bool> CreateAsync(Interrogatorio interrogatorio)
         {
             try
             {
-                var dto = ConvertToDto(interrogatorio);
-                var json = JsonSerializer.Serialize(dto, _jsonOptions);
+                Console.WriteLine($"Creating interrogatorio with ID: {interrogatorio.Id}");
+                
+                // Crear el request que espera el controlador
+                var request = new CrearInterrogatorioRequest(
+                    interrogatorio.Id,
+                    interrogatorio.Descripcion, // Usar descripción como pregunta
+                    null, // Respuesta puede ser null
+                    interrogatorio.FechaHora,
+                    interrogatorio.Tipo.ToString() // Convertir enum a string
+                );
+                
+                var json = JsonSerializer.Serialize(request, _jsonOptions);
+                Console.WriteLine($"Sending request: {json}");
+                
                 var content = new StringContent(json, System.Text.Encoding.UTF8, "application/json");
                 var response = await _httpClient.PostAsync(_baseEndpoint, content);
+                
+                Console.WriteLine($"Create response status: {response.StatusCode}");
+                
+                if (!response.IsSuccessStatusCode)
+                {
+                    var errorContent = await response.Content.ReadAsStringAsync();
+                    Console.WriteLine($"Create error response: {errorContent}");
+                }
+                
                 return response.IsSuccessStatusCode;
             }
             catch (Exception ex)
             {
                 Console.WriteLine($"Error creating interrogatorio: {ex.Message}");
+                Console.WriteLine($"Stack trace: {ex.StackTrace}");
                 return false;
             }
-        }
-
-        public async Task<bool> UpdateAsync(Guid id, Interrogatorio interrogatorio)
+        }        public async Task<bool> UpdateAsync(Guid id, Interrogatorio interrogatorio)
         {
             try
             {
-                var dto = ConvertToDto(interrogatorio);
-                var json = JsonSerializer.Serialize(dto, _jsonOptions);
+                Console.WriteLine($"Updating interrogatorio with ID: {id}");
+                
+                // Crear el request que espera el controlador
+                var request = new CrearInterrogatorioRequest(
+                    interrogatorio.Id,
+                    interrogatorio.Descripcion,
+                    null,
+                    interrogatorio.FechaHora,
+                    interrogatorio.Tipo.ToString()
+                );
+                
+                var json = JsonSerializer.Serialize(request, _jsonOptions);
+                Console.WriteLine($"Sending update request: {json}");
+                
                 var content = new StringContent(json, System.Text.Encoding.UTF8, "application/json");
                 var response = await _httpClient.PutAsync($"{_baseEndpoint}/{id}", content);
+                
+                Console.WriteLine($"Update response status: {response.StatusCode}");
+                
+                if (!response.IsSuccessStatusCode)
+                {
+                    var errorContent = await response.Content.ReadAsStringAsync();
+                    Console.WriteLine($"Update error response: {errorContent}");
+                }
+                
                 return response.IsSuccessStatusCode;
             }
             catch (Exception ex)
             {
                 Console.WriteLine($"Error updating interrogatorio: {ex.Message}");
+                Console.WriteLine($"Stack trace: {ex.StackTrace}");
                 return false;
             }
         }
@@ -138,23 +178,7 @@ namespace EtapaDeJuicio.UI.Web.Services
             var descripcion = !string.IsNullOrEmpty(dto.Pregunta) ? dto.Pregunta : "Interrogatorio";
             return Interrogatorio.Crear(dto.Id, descripcion, dto.FechaHora, tipo);
         }
-
-        private InterrogatorioApiDto ConvertToDto(Interrogatorio interrogatorio)
-        {
-            // Como la API espera pregunta/respuesta pero el dominio tiene una estructura diferente,
-            // vamos a usar la descripción como pregunta y null como respuesta por defecto
-            return new InterrogatorioApiDto
-            {
-                Id = interrogatorio.Id,
-                Pregunta = interrogatorio.Descripcion,
-                Respuesta = null, // El dominio de Interrogatorio no tiene una respuesta directa
-                FechaHora = interrogatorio.FechaHora,
-                Tipo = interrogatorio.Tipo
-            };
-        }
-    }
-
-    // DTO que coincide con lo que devuelve la API
+    }// DTO que coincide con lo que devuelve la API
     public class InterrogatorioApiDto
     {
         public Guid Id { get; set; }
@@ -163,4 +187,7 @@ namespace EtapaDeJuicio.UI.Web.Services
         public DateTime FechaHora { get; set; }
         public TipoInterrogatorio? Tipo { get; set; }
     }
+
+    // Request que espera el controlador para crear interrogatorios
+    public record CrearInterrogatorioRequest(Guid Id, string? Pregunta, string? Respuesta, DateTime FechaHora, string? Tipo);
 }

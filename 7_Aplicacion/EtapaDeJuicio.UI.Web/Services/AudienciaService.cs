@@ -146,8 +146,15 @@ namespace EtapaDeJuicio.UI.Web.Services
                 tipo = TipoAudiencia.JuicioOral;
             }
 
-            return Audiencia.Crear(dto.Id, dto.Titulo ?? "", dto.FechaProgramada, tipo);
-        }        private AudienciaApiDto ConvertToDto(Audiencia audiencia)
+            // Parse estado de audiencia desde string
+            if (!Enum.TryParse<EstadoAudiencia>(dto.Estado ?? "", out var estado))
+            {
+                estado = EstadoAudiencia.Programada;
+            }
+
+            // Usar Reconstruir para cargar desde API sin validación de fecha futura
+            return Audiencia.Reconstruir(dto.Id, dto.Titulo ?? "", dto.FechaProgramada, tipo, estado);
+        }private AudienciaApiDto ConvertToDto(Audiencia audiencia)
         {
             return new AudienciaApiDto
             {

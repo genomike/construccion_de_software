@@ -55,6 +55,26 @@ public class Audiencia
     {
         return new Audiencia(id, titulo, fechaHoraProgramada, tipo);
     }
+
+    // Constructor para reconstruir desde base de datos - sin validación de fecha futura
+    public static Audiencia Reconstruir(Guid id, string titulo, DateTime fechaHoraProgramada, TipoAudiencia tipo, EstadoAudiencia estado = EstadoAudiencia.Programada)
+    {
+        if (id == Guid.Empty)
+            throw new DomainException("El ID de la audiencia no puede estar vacío");
+
+        if (string.IsNullOrWhiteSpace(titulo))
+            throw new DomainException("El título de la audiencia es obligatorio");
+
+        // Usar el constructor sin parámetros y asignar directamente
+        var audiencia = new Audiencia();
+        audiencia.Id = id;
+        audiencia.Titulo = titulo;
+        audiencia.FechaHoraProgramada = fechaHoraProgramada;
+        audiencia.Tipo = tipo;
+        audiencia.Estado = estado;
+        return audiencia;
+    }
+
     public void Iniciar()
     {
         if (Estado != EstadoAudiencia.Programada)
