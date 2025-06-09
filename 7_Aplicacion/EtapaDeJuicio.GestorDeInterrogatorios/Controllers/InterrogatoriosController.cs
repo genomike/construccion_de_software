@@ -2,6 +2,8 @@ using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using EtapaDeJuicio.Domain.Entities;
 using EtapaDeJuicio.Domain.ValueObjects;
+using EtapaDeJuicio.Application.Commands.Audiencias;
+using EtapaDeJuicio.Domain.Entities.Audiencias;
 
 namespace EtapaDeJuicio.GestorDeInterrogatorios.Controllers;
 
@@ -16,9 +18,7 @@ public class InterrogatoriosController : ControllerBase
     {
         _mediator = mediator;
         _logger = logger;
-    }
-
-    /// <summary>
+    }    /// <summary>
     /// Inicia un interrogatorio a un testigo
     /// </summary>
     [HttpPost("testigo")]
@@ -26,24 +26,30 @@ public class InterrogatoriosController : ControllerBase
     {
         try
         {
-            var interrogatorioId = Guid.NewGuid();
-            
             _logger.LogInformation(
                 "Iniciando interrogatorio a testigo {Testigo} en audiencia {AudienciaId} por {Interrogador}",
                 request.TestigoId, request.AudienciaId, request.InterrogadorId);
 
-            // TODO: Implementar comando para crear interrogatorio
+            var descripcion = $"Interrogatorio a testigo {request.TestigoId} por {request.TipoInterrogador}";
+            var observaciones = $"Interrogador: {request.InterrogadorId}, Tipo: {request.TipoInterrogador}";
+
+            var command = new RegistrarActividadCommand(
+                request.AudienciaId,
+                descripcion,
+                (int)TipoActividad.TestimonialDeclaraciones,
+                observaciones
+            );
+
+            var result = await _mediator.Send(command);
             
-            return CreatedAtAction(nameof(ObtenerInterrogatorio), new { id = interrogatorioId }, interrogatorioId);
+            return CreatedAtAction(nameof(ObtenerInterrogatorio), new { id = result.ActividadId }, result.ActividadId);
         }
         catch (Exception ex)
         {
             _logger.LogError(ex, "Error al iniciar interrogatorio a testigo");
             return StatusCode(500, "Error interno del servidor");
         }
-    }
-
-    /// <summary>
+    }    /// <summary>
     /// Inicia un interrogatorio al acusado
     /// </summary>
     [HttpPost("acusado")]
@@ -51,93 +57,129 @@ public class InterrogatoriosController : ControllerBase
     {
         try
         {
-            var interrogatorioId = Guid.NewGuid();
-            
             _logger.LogInformation(
                 "Iniciando interrogatorio a acusado {AcusadoId} en audiencia {AudienciaId} por {Interrogador}",
                 request.AcusadoId, request.AudienciaId, request.InterrogadorId);
 
-            return CreatedAtAction(nameof(ObtenerInterrogatorio), new { id = interrogatorioId }, interrogatorioId);
+            var descripcion = $"Interrogatorio a acusado {request.AcusadoId} por {request.TipoInterrogador}";
+            var observaciones = $"Interrogador: {request.InterrogadorId}, Tipo: {request.TipoInterrogador}";
+
+            var command = new RegistrarActividadCommand(
+                request.AudienciaId,
+                descripcion,
+                (int)TipoActividad.TestimonialDeclaraciones,
+                observaciones
+            );
+
+            var result = await _mediator.Send(command);
+
+            return CreatedAtAction(nameof(ObtenerInterrogatorio), new { id = result.ActividadId }, result.ActividadId);
         }
         catch (Exception ex)
         {
             _logger.LogError(ex, "Error al iniciar interrogatorio al acusado");
             return StatusCode(500, "Error interno del servidor");
         }
-    }
-
-    /// <summary>
+    }    /// <summary>
     /// Realiza una pregunta en el interrogatorio
     /// </summary>
-    [HttpPost("{id}/preguntas")]
-    public async Task<ActionResult> RealizarPregunta(Guid id, [FromBody] RealizarPreguntaRequest request)
+    [HttpPost("{audienciaId}/actividades/{actividadId}/preguntas")]
+    public async Task<ActionResult> RealizarPregunta(Guid audienciaId, Guid actividadId, [FromBody] RealizarPreguntaRequest request)
     {
         try
         {
             _logger.LogInformation(
-                "Pregunta realizada en interrogatorio {InterrogatorioId}: {Pregunta}",
-                id, request.Pregunta);
+                "Pregunta realizada en interrogatorio {ActividadId} de audiencia {AudienciaId}: {Pregunta}",
+                actividadId, audienciaId, request.Pregunta);
 
-            // TODO: Implementar comando para agregar pregunta al interrogatorio
+            var descripcion = $"Pregunta en interrogatorio: {request.Pregunta}";
+            var observaciones = $"Preguntado por: {request.PreguntadoPor}, Timestamp: {request.Timestamp}";
+
+            var command = new RegistrarActividadCommand(
+                audienciaId,
+                descripcion,
+                (int)TipoActividad.TestimonialDeclaraciones,
+                observaciones
+            );
+
+            var result = await _mediator.Send(command);
             
-            return Ok($"Pregunta agregada al interrogatorio {id}");
+            return Ok(new { actividadId = result.ActividadId, pregunta = request.Pregunta });
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Error al realizar pregunta en interrogatorio {Id}", id);
+            _logger.LogError(ex, "Error al realizar pregunta en interrogatorio {ActividadId}", actividadId);
             return StatusCode(500, "Error interno del servidor");
         }
-    }
-
-    /// <summary>
+    }    /// <summary>
     /// Registra una respuesta en el interrogatorio
     /// </summary>
-    [HttpPost("{id}/respuestas")]
-    public async Task<ActionResult> RegistrarRespuesta(Guid id, [FromBody] RegistrarRespuestaRequest request)
+    [HttpPost("{audienciaId}/actividades/{actividadId}/respuestas")]
+    public async Task<ActionResult> RegistrarRespuesta(Guid audienciaId, Guid actividadId, [FromBody] RegistrarRespuestaRequest request)
     {
         try
         {
             _logger.LogInformation(
-                "Respuesta registrada en interrogatorio {InterrogatorioId}: {Respuesta}",
-                id, request.Respuesta);
+                "Respuesta registrada en interrogatorio {ActividadId} de audiencia {AudienciaId}: {Respuesta}",
+                actividadId, audienciaId, request.Respuesta);
 
-            return Ok($"Respuesta registrada en interrogatorio {id}");
+            var descripcion = $"Respuesta en interrogatorio: {request.Respuesta}";
+            var observaciones = $"Timestamp: {request.Timestamp}, Observaciones: {request.Observaciones}";
+
+            var command = new RegistrarActividadCommand(
+                audienciaId,
+                descripcion,
+                (int)TipoActividad.TestimonialDeclaraciones,
+                observaciones
+            );
+
+            var result = await _mediator.Send(command);
+
+            return Ok(new { actividadId = result.ActividadId, respuesta = request.Respuesta });
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Error al registrar respuesta en interrogatorio {Id}", id);
+            _logger.LogError(ex, "Error al registrar respuesta en interrogatorio {ActividadId}", actividadId);
             return StatusCode(500, "Error interno del servidor");
         }
-    }
-
-    /// <summary>
+    }    /// <summary>
     /// Finaliza un interrogatorio
     /// </summary>
-    [HttpPost("{id}/finalizar")]
-    public async Task<ActionResult> FinalizarInterrogatorio(Guid id)
+    [HttpPost("{audienciaId}/actividades/{actividadId}/finalizar")]
+    public async Task<ActionResult> FinalizarInterrogatorio(Guid audienciaId, Guid actividadId)
     {
         try
         {
-            _logger.LogInformation("Finalizando interrogatorio {InterrogatorioId}", id);
+            _logger.LogInformation("Finalizando interrogatorio {ActividadId} de audiencia {AudienciaId}", actividadId, audienciaId);
             
-            return Ok($"Interrogatorio {id} finalizado correctamente");
+            var descripcion = "Interrogatorio finalizado";
+            var observaciones = $"Finalizado en: {DateTime.UtcNow}";
+
+            var command = new RegistrarActividadCommand(
+                audienciaId,
+                descripcion,
+                (int)TipoActividad.TestimonialDeclaraciones,
+                observaciones
+            );
+
+            var result = await _mediator.Send(command);
+            
+            return Ok(new { mensaje = $"Interrogatorio {actividadId} finalizado correctamente", actividadId = result.ActividadId });
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Error al finalizar interrogatorio {Id}", id);
+            _logger.LogError(ex, "Error al finalizar interrogatorio {ActividadId}", actividadId);
             return StatusCode(500, "Error interno del servidor");
         }
-    }
-
-    /// <summary>
+    }    /// <summary>
     /// Obtiene un interrogatorio por ID
     /// </summary>
     [HttpGet("{id}")]
-    public async Task<ActionResult<InterrogatorioDto>> ObtenerInterrogatorio(Guid id)
+    public ActionResult<InterrogatorioDto> ObtenerInterrogatorio(Guid id)
     {
         try
         {
-            // TODO: Implementar query para obtener interrogatorio
+            // TODO: Implementar query para obtener actividad de interrogatorio
             _logger.LogInformation("Solicitud de interrogatorio con ID: {Id}", id);
             return NotFound($"Interrogatorio con ID {id} no encontrado");
         }
@@ -146,17 +188,16 @@ public class InterrogatoriosController : ControllerBase
             _logger.LogError(ex, "Error al obtener interrogatorio con ID: {Id}", id);
             return StatusCode(500, "Error interno del servidor");
         }
-    }
-
-    /// <summary>
+    }    /// <summary>
     /// Obtiene todos los interrogatorios de una audiencia
     /// </summary>
     [HttpGet("audiencia/{audienciaId}")]
-    public async Task<ActionResult<IEnumerable<InterrogatorioDto>>> ObtenerInterrogatoriosPorAudiencia(Guid audienciaId)
+    public ActionResult<IEnumerable<InterrogatorioDto>> ObtenerInterrogatoriosPorAudiencia(Guid audienciaId)
     {
         try
         {
             _logger.LogInformation("Solicitud de interrogatorios para audiencia: {AudienciaId}", audienciaId);
+            // TODO: Implementar query para obtener actividades de tipo TestimonialDeclaraciones de una audiencia
             return Ok(new List<InterrogatorioDto>());
         }
         catch (Exception ex)
@@ -164,38 +205,48 @@ public class InterrogatoriosController : ControllerBase
             _logger.LogError(ex, "Error al obtener interrogatorios para audiencia: {AudienciaId}", audienciaId);
             return StatusCode(500, "Error interno del servidor");
         }
-    }
-
-    /// <summary>
+    }    /// <summary>
     /// Realiza una objeción durante el interrogatorio
     /// </summary>
-    [HttpPost("{id}/objeciones")]
-    public async Task<ActionResult> RealizarObjecion(Guid id, [FromBody] RealizarObjecionRequest request)
+    [HttpPost("{audienciaId}/actividades/{actividadId}/objeciones")]
+    public async Task<ActionResult> RealizarObjecion(Guid audienciaId, Guid actividadId, [FromBody] RealizarObjecionRequest request)
     {
         try
         {
             _logger.LogInformation(
-                "Objeción realizada en interrogatorio {InterrogatorioId} por {ObjetorId}: {Motivo}",
-                id, request.ObjetorId, request.Motivo);
+                "Objeción realizada en interrogatorio {ActividadId} de audiencia {AudienciaId} por {ObjetorId}: {Motivo}",
+                actividadId, audienciaId, request.ObjetorId, request.Motivo);
 
-            return Ok($"Objeción registrada en interrogatorio {id}");
+            var descripcion = $"Objeción en interrogatorio: {request.Motivo}";
+            var observaciones = $"Objetor: {request.ObjetorId}, Timestamp: {request.Timestamp}";
+
+            var command = new RegistrarActividadCommand(
+                audienciaId,
+                descripcion,
+                (int)TipoActividad.TestimonialDeclaraciones,
+                observaciones
+            );
+
+            var result = await _mediator.Send(command);
+
+            return Ok(new { actividadId = result.ActividadId, objecion = request.Motivo });
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Error al realizar objeción en interrogatorio {Id}", id);
+            _logger.LogError(ex, "Error al realizar objeción en interrogatorio {ActividadId}", actividadId);
             return StatusCode(500, "Error interno del servidor");
         }
     }    /// <summary>
     /// Obtiene todos los interrogatorios
     /// </summary>
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<InterrogatorioDto>>> ObtenerTodosLosInterrogatorios()
+    public ActionResult<IEnumerable<InterrogatorioDto>> ObtenerTodosLosInterrogatorios()
     {
         try
         {
             _logger.LogInformation("Solicitud de todos los interrogatorios");
             
-            // TODO: Implementar query para obtener todos los interrogatorios
+            // TODO: Implementar query para obtener todas las actividades de tipo TestimonialDeclaraciones
             // Por ahora retornamos una lista vacía
             return Ok(new List<InterrogatorioDto>());
         }
@@ -204,9 +255,7 @@ public class InterrogatoriosController : ControllerBase
             _logger.LogError(ex, "Error al obtener todos los interrogatorios");
             return StatusCode(500, "Error interno del servidor");
         }
-    }
-
-    /// <summary>
+    }/// <summary>
     /// Crea un nuevo interrogatorio genérico
     /// </summary>
     [HttpPost]
@@ -214,16 +263,38 @@ public class InterrogatoriosController : ControllerBase
     {
         try
         {
-            var interrogatorioId = request.Id != Guid.Empty ? request.Id : Guid.NewGuid();
-            
             _logger.LogInformation(
-                "Creando interrogatorio genérico {InterrogatorioId} con pregunta: {Pregunta}",
-                interrogatorioId, request.Pregunta);
+                "Creando interrogatorio genérico con pregunta: {Pregunta}",
+                request.Pregunta);
 
-            // TODO: Implementar comando para crear interrogatorio genérico
-            // Por ahora retornamos el ID creado
+            // Para interrogatorios genéricos, necesitamos obtener el AudienciaId de alguna manera
+            // Por ahora usaremos un ID por defecto o requeriremos que se pase en el request
+            if (request.AudienciaId == Guid.Empty)
+            {
+                return BadRequest("Se requiere un ID de audiencia válido para crear el interrogatorio");
+            }
+
+            var descripcion = !string.IsNullOrEmpty(request.Pregunta) 
+                ? $"Interrogatorio: {request.Pregunta}" 
+                : "Interrogatorio genérico";
             
-            return CreatedAtAction(nameof(ObtenerInterrogatorio), new { id = interrogatorioId }, interrogatorioId);
+            var observaciones = $"Tipo: {request.Tipo}, Fecha: {request.FechaHora}";
+            
+            if (!string.IsNullOrEmpty(request.Respuesta))
+            {
+                observaciones += $", Respuesta: {request.Respuesta}";
+            }
+
+            var command = new RegistrarActividadCommand(
+                request.AudienciaId,
+                descripcion,
+                (int)TipoActividad.TestimonialDeclaraciones,
+                observaciones
+            );
+
+            var result = await _mediator.Send(command);
+            
+            return CreatedAtAction(nameof(ObtenerInterrogatorio), new { id = result.ActividadId }, result.ActividadId);
         }
         catch (Exception ex)
         {
@@ -239,7 +310,7 @@ public record IniciarInterrogatorioAcusadoRequest(Guid AudienciaId, Guid Acusado
 public record RealizarPreguntaRequest(string Pregunta, Guid PreguntadoPor, DateTime Timestamp);
 public record RegistrarRespuestaRequest(string Respuesta, DateTime Timestamp, string Observaciones);
 public record RealizarObjecionRequest(Guid ObjetorId, string Motivo, DateTime Timestamp);
-public record CrearInterrogatorioRequest(Guid Id, string? Pregunta, string? Respuesta, DateTime FechaHora, string? Tipo);
+public record CrearInterrogatorioRequest(Guid Id, Guid AudienciaId, string? Pregunta, string? Respuesta, DateTime FechaHora, string? Tipo);
 
 // DTO para respuesta
 public record InterrogatorioDto(
